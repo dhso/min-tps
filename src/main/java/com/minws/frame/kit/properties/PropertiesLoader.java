@@ -7,10 +7,8 @@ import java.util.NoSuchElementException;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
-import org.slf4j.LoggerFactory;
 
 import com.jfinal.log.Logger;
-import com.minws.frame.sdk.qiniu.QiniuConfig;
 
 /**
  * Properties文件载入工具类. 可载入多个properties文件,

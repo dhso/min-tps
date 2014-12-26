@@ -6,11 +6,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import com.jfinal.log.Logger;
 
 
 public class SerializableKit {
-    private static Logger LOG = Logger.getLogger(SerializableKit.class);
 
     /**
      * 将对象序列化为byte[]
