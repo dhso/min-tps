@@ -8,52 +8,20 @@
 package com.minws.blog;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
 
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
-import com.jfinal.upload.UploadFile;
 import com.minws.frame.kit.HttpUtils;
 import com.minws.frame.kit.StringUtils;
-import com.minws.frame.kit.properties.ProsMap;
-import com.minws.frame.sdk.qiniu.QiniuKit;
-import com.qiniu.api.rsf.ListItem;
 
 public class BlogController extends Controller {
 	private static final Logger logger = Logger.getLogger(BlogController.class);
 	
 	public void index() {
 		//List list = QiniuKit.list(ProsMap.getStrPro("wish.qiniu.bucket"));
-		
 		render("index.ftl");
-		return;
-	}
-	
-	public void upload(){
-		UploadFile uf =  getFile();
-		System.out.print(uf.getFileName());
-		QiniuKit.put(ProsMap.getStrPro("wish.qiniu.bucket"), uf.getFileName(), uf.getFile());
-	}
-	
-	public void wishWall(){
-		render("wish_wall.ftl");
-		return;
-	}
-	
-	public void picWall(){
-		List<ListItem> list = QiniuKit.list(ProsMap.getStrPro("wish.qiniu.bucket"),"wedding");
-		List<String> picList = new ArrayList<String>();
-		Iterator<ListItem> itr = list.iterator();
-		while (itr.hasNext()) {
-		    picList.add(itr.next().key);
-		}
-		logger.debug("qiniu");
-		setAttr("picList", picList);
-		render("pic_wall.ftl");
 		return;
 	}
 	
