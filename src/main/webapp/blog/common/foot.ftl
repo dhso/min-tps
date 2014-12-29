@@ -1,3 +1,12 @@
+<button class="command-button primary">
+    <i class="icon-share-2 on-left"></i>
+    Yes, share and connect
+    <small>Use this option for home or work</small>
+</button>
+<blockquote class="place-right">
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+</blockquote>
 <script type="text/javascript" src="static/js/jquery-2.0.1.min.js"></script>
 <script type="text/javascript" src="static/js/jquery.widget.min.js"></script>
 <script type="text/javascript" src="static/js/jquery.mousewheel.js"></script>

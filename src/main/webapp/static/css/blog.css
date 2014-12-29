@@ -11,7 +11,7 @@ body{
 	background-attachment:fixed;
 	font-family: "ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
 }
-.m-content,.navigation-bar-content{
+.m-content,.m-foot,.navigation-bar-content{
 	width: 998px;
 	margin: 0 auto;
 	text-align: left;
@@ -22,6 +22,9 @@ body{
 .list-across{
 	display: inline-block!important;
 	width:329px!important;
+}
+.pagination-right{
+	margin-bottom: 40px!important;
 }
 .pagination-right ul{
 	float:right;
