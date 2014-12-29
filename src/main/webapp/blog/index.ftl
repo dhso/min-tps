@@ -6,6 +6,7 @@
 </head>
 <body class="metro">
 	<#include "common/navigation_bar.ftl" encoding="UTF-8">
+	<div class="blank-split"></div>
 	<div class="m-content">
 	<#include "common/fluentmenu.ftl" encoding="UTF-8">
 	<div class="blank-split"></div>
