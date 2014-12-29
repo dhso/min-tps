@@ -6,8 +6,13 @@
 </head>
 <body class="metro">
 	<#include "common/navigation_bar.ftl" encoding="UTF-8">
+	<div class="m-content">
 	<#include "common/fluentmenu.ftl" encoding="UTF-8">
-
+	<div class="blank-split"></div>
+	<#include "common/lists.ftl" encoding="UTF-8">
+	<div class="blank-split"></div>
+	<#include "common/pagination.ftl" encoding="UTF-8">
+	</div>
 	<#include "common/foot.ftl" encoding="UTF-8">
 </body>
 </html>

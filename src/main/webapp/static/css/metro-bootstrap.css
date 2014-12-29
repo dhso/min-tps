@@ -6690,10 +6690,10 @@ a {
   clear: both;
 }
 .metro .listview .list:hover {
-  outline: 3px #ccc solid;
+  /* outline: 3px #ccc solid; -by hadong*/
 }
 .metro .listview .list:active {
-  outline: 3px #3e3e3e solid;
+  /* outline: 3px #3e3e3e solid; -by hadong*/
 }
 .metro .listview .list {
   border: 1px #eaeaea solid;
