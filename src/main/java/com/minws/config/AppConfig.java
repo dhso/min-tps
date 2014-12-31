@@ -9,8 +9,10 @@ import com.jfinal.config.Routes;
 import com.jfinal.core.JFinal;
 import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.ext.handler.UrlSkipHandler;
+import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
+import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
-import com.minws.blog.BlogController;
+import com.minws.blog.ctrl.BlogController;
 import com.minws.frame.kit.HttpUtils;
 import com.minws.frame.kit.properties.ProsMap;
 
@@ -38,7 +40,11 @@ public class AppConfig extends JFinalConfig {
 	 * 配置插件
 	 */
 	public void configPlugin(Plugins me) {
-
+		// c3p0 数据源插件
+		C3p0Plugin cp = new C3p0Plugin(ProsMap.getStrPro("blog.jdbcUrl"), ProsMap.getStrPro("blog.user"), ProsMap.getStrPro("blog.password"));
+		me.add(cp);
+		// ActiveRecrod 支持插件
+		me.add(new ActiveRecordPlugin(cp));
 	}
 
 	/**
@@ -66,7 +72,7 @@ public class AppConfig extends JFinalConfig {
 
 	@Override
 	public void afterJFinalStart() {
-		HttpUtils.setProxy(ProsMap.getStrPro("blog.ace.proxy.http.host"), ProsMap.getStrPro("blog.ace.proxy.http.port"), ProsMap.getStrPro("blog.ace.proxy.auth.username"), ProsMap.getStrPro("blog.ace.proxy.auth.password"));
+		//HttpUtils.setProxy(ProsMap.getStrPro("blog.local.proxy.http.host"), ProsMap.getStrPro("blog.local.proxy.http.port"), ProsMap.getStrPro("blog.local.proxy.auth.username"), ProsMap.getStrPro("blog.local.proxy.auth.password"));
 	}
 
 }
