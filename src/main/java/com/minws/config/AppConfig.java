@@ -13,7 +13,6 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
 import com.minws.blog.ctrl.BlogController;
-import com.minws.frame.kit.HttpUtils;
 import com.minws.frame.kit.properties.ProsMap;
 
 /**

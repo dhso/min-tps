@@ -13,6 +13,8 @@ import org.apache.http.client.ClientProtocolException;
 
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import com.minws.blog.model.ArticleModel;
 import com.minws.frame.kit.HttpUtils;
 import com.minws.frame.kit.StringUtils;
@@ -22,10 +24,11 @@ public class BlogController extends Controller {
 
 	public void index() {
 		//List list = QiniuKit.list(ProsMap.getStrPro("wish.qiniu.bucket"));
-		Integer pageNumber = 0;
+		Integer pageNumber = 1;
 		Integer pageSize = 10;
 		String writer = "hadong";
-		ArticleModel.getArticleList(pageNumber, pageSize, writer);
+		Page<Record> page= ArticleModel.getArticleList(pageNumber, pageSize, writer);
+		setAttr("page", page);
 		render("index.ftl");
 		return;
 	}

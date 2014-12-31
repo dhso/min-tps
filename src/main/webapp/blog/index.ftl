@@ -11,7 +11,7 @@
 	<div class="m-content">
 		<#include "common/fluentmenu.ftl" encoding="UTF-8">
 		<div class="blank-split"></div>
-		<#include "common/lists.ftl" encoding="UTF-8">
+		<#include "common/articleList.ftl" encoding="UTF-8">
 		<div class="blank-split"></div>
 		<#include "common/pagination.ftl" encoding="UTF-8">
 		<div class="progress-bar small" data-role="progress-bar" data-color="#ccc"></div>
