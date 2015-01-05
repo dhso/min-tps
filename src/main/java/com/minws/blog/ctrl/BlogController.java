@@ -8,6 +8,7 @@
 package com.minws.blog.ctrl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.http.client.ClientProtocolException;
 
@@ -21,7 +22,7 @@ public class BlogController extends Controller {
 	private static final Logger logger = Logger.getLogger(BlogController.class);
 
 	public void index() {
-		//List list = QiniuKit.list(ProsMap.getStrPro("wish.qiniu.bucket"));
+		// List list = QiniuKit.list(ProsMap.getStrPro("wish.qiniu.bucket"));
 		Integer pageNumber = 0;
 		Integer pageSize = 10;
 		String writer = "hadong";
@@ -42,5 +43,14 @@ public class BlogController extends Controller {
 		logger.debug(getRes);
 		renderJson(getRes);
 		return;
+	}
+
+	public void craweler() throws Exception {
+		OschinaCrawler oschinaCrawler = new OschinaCrawler();
+		oschinaCrawler.addRegex("+http://www\\.oschina\\.net/code/list.*");
+		oschinaCrawler.addSeed("http://www\\.oschina\\.net/");
+		oschinaCrawler.setResumable(true);
+		oschinaCrawler.start(5);
+
 	}
 }
