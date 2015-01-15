@@ -5,7 +5,7 @@
  * @author hadong
  *
  */
-package com.minws.blog.ctrl;
+package com.minws.tps.ctrl;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -16,12 +16,12 @@ import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
-import com.minws.blog.model.ArticleModel;
 import com.minws.frame.kit.HttpUtils;
 import com.minws.frame.kit.StringUtils;
+import com.minws.tps.model.ArticleModel;
 
-public class BlogController extends Controller {
-	private static final Logger logger = Logger.getLogger(BlogController.class);
+public class TpsController extends Controller {
+	private static final Logger logger = Logger.getLogger(TpsController.class);
 
 	public void index() {
 		// List list = QiniuKit.list(ProsMap.getStrPro("wish.qiniu.bucket"));

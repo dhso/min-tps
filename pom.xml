@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.minws</groupId>
-	<artifactId>blog</artifactId>
+	<artifactId>tps</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>min-blog</name>
+	<name>min-tps</name>
 	<url>http://www.minws.com</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,14 +20,14 @@
 			</activation>
 			<properties>
 				<log4j.rootLogger>DEBUG, stdout, file</log4j.rootLogger>
-				<config.name>blog.config.properties</config.name>
+				<config.name>tps.config.properties</config.name>
 			</properties>
 		</profile>
 		<profile>
 			<id>ace</id>
 			<properties>
 				<log4j.rootLogger>DEBUG, aceAppender</log4j.rootLogger>
-				<config.name>blog.config.properties</config.name>
+				<config.name>tps.config.properties</config.name>
 			</properties>
 		</profile>
 	</profiles>

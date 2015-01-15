@@ -12,8 +12,8 @@ import com.jfinal.ext.handler.UrlSkipHandler;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
-import com.minws.blog.ctrl.BlogController;
 import com.minws.frame.kit.properties.ProsMap;
+import com.minws.tps.ctrl.TpsController;
 
 /**
  * API引导式配置
@@ -24,7 +24,7 @@ public class AppConfig extends JFinalConfig {
 	 * 配置常量
 	 */
 	public void configConstant(Constants me) {
-		me.setDevMode(ProsMap.getBooPro("blog.devMode"));
+		me.setDevMode(ProsMap.getBooPro("tps.devMode"));
 		me.setViewType(ViewType.FREE_MARKER); // 设置视图类型，默认为FreeMarker
 	}
 
@@ -32,7 +32,7 @@ public class AppConfig extends JFinalConfig {
 	 * 配置路由
 	 */
 	public void configRoute(Routes me) {
-		me.add("/", BlogController.class, "/blog");
+		me.add("/", TpsController.class, "/tps");
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class AppConfig extends JFinalConfig {
 	 */
 	public void configPlugin(Plugins me) {
 		// c3p0 数据源插件
-		C3p0Plugin cp = new C3p0Plugin(ProsMap.getStrPro("blog.jdbcUrl"), ProsMap.getStrPro("blog.user"), ProsMap.getStrPro("blog.password"));
+		C3p0Plugin cp = new C3p0Plugin(ProsMap.getStrPro("tps.jdbcUrl"), ProsMap.getStrPro("tps.user"), ProsMap.getStrPro("tps.password"));
 		me.add(cp);
 		// ActiveRecrod 支持插件
 		me.add(new ActiveRecordPlugin(cp));
@@ -71,7 +71,7 @@ public class AppConfig extends JFinalConfig {
 
 	@Override
 	public void afterJFinalStart() {
-		//HttpUtils.setProxy(ProsMap.getStrPro("blog.local.proxy.http.host"), ProsMap.getStrPro("blog.local.proxy.http.port"), ProsMap.getStrPro("blog.local.proxy.auth.username"), ProsMap.getStrPro("blog.local.proxy.auth.password"));
+		//HttpUtils.setProxy(ProsMap.getStrPro("tps.local.proxy.http.host"), ProsMap.getStrPro("tps.local.proxy.http.port"), ProsMap.getStrPro("tps.local.proxy.auth.username"), ProsMap.getStrPro("tps.local.proxy.auth.password"));
 	}
 
 }

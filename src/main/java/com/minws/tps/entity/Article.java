@@ -1,4 +1,4 @@
-package com.minws.blog.entity;
+package com.minws.tps.entity;
 
 import java.io.Serializable;
 

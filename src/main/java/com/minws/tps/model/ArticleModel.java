@@ -1,4 +1,4 @@
-package com.minws.blog.model;
+package com.minws.tps.model;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;

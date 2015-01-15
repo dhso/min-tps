@@ -1,3 +1,3 @@
-min-blog
+min-tps
 ========
 
