@@ -51,4 +51,6 @@ public class BlogController extends Controller {
 		renderJson(getRes);
 		return;
 	}
+
+
 }
