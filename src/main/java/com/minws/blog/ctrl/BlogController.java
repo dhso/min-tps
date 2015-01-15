@@ -8,6 +8,7 @@
 package com.minws.blog.ctrl;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.apache.http.client.ClientProtocolException;
 
@@ -23,11 +24,15 @@ public class BlogController extends Controller {
 	private static final Logger logger = Logger.getLogger(BlogController.class);
 
 	public void index() {
-		//List list = QiniuKit.list(ProsMap.getStrPro("wish.qiniu.bucket"));
+		// List list = QiniuKit.list(ProsMap.getStrPro("wish.qiniu.bucket"));
 		Integer pageNumber = 1;
 		Integer pageSize = 10;
 		String writer = "hadong";
-		Page<Record> page= ArticleModel.getArticleList(pageNumber, pageSize, writer);
+		Page<Record> page = ArticleModel.getArticleList(pageNumber, pageSize, writer);
+		Iterator<Record> it = page.getList().iterator();
+		while (it.hasNext()) {
+			it.next().set("content", StringUtils.rabbr(StringUtils.replaceHtml(it.next().get("content").toString()), 200));
+		}
 		setAttr("page", page);
 		render("index.ftl");
 		return;

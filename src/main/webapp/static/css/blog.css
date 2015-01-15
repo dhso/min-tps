@@ -49,9 +49,6 @@ body {
 .metro .listview .list-article .list-content {
 	font-size: 10px;
 	display: block;
-	white-space: normal;
-	text-overflow: clip;
-	overflow: hidden;
 	height: 100px;
 }
 

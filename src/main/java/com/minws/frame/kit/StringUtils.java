@@ -41,11 +41,17 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		if (isBlank(html)) {
 			return "";
 		}
-		String regEx = "<.+?>";
-		Pattern p = Pattern.compile(regEx);
-		Matcher m = p.matcher(html);
-		String s = m.replaceAll("");
-		return s;
+		String regxpForHtml = "<.*>";
+		Pattern pattern = Pattern.compile(regxpForHtml);   
+        Matcher matcher = pattern.matcher(html);   
+        StringBuffer sb = new StringBuffer();   
+        boolean result = matcher.find();   
+        while (result) {   
+            matcher.appendReplacement(sb, "");   
+            result = matcher.find();   
+        }   
+        matcher.appendTail(sb);
+		return sb.toString();
 	}
 
 	/**
