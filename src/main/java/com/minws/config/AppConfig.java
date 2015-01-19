@@ -1,5 +1,9 @@
 package com.minws.config;
 
+import java.util.Properties;
+
+import cn.dreampie.shiro.core.ShiroInterceptor;
+import cn.dreampie.shiro.core.ShiroPlugin;
 
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -16,11 +20,10 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.ViewType;
+import com.minws.frame.config.ConfigKit;
+import com.minws.frame.config.ConfigPlugin;
 import com.minws.frame.handler.SessionHandler;
-import com.minws.frame.kit.properties.ProsMap;
-import com.minws.frame.plugin.shiro.ShiroFreeMarkerInterceptor;
-import com.minws.frame.plugin.shiro.ShiroInterceptor;
-import com.minws.frame.plugin.shiro.ShiroPlugin;
+import com.minws.frame.plugin.shiro.MyJdbcAuthzService;
 import com.minws.frame.plugin.xss.XssHandler;
 import com.minws.frame.route.AutoBindRoutes;
 
@@ -29,7 +32,6 @@ import com.minws.frame.route.AutoBindRoutes;
  */
 public class AppConfig extends JFinalConfig {
 
-	public boolean OPEN_SHIRO = true;
 	private Routes routes;
 
 	/**
@@ -37,15 +39,18 @@ public class AppConfig extends JFinalConfig {
 	 */
 	public void configConstant(Constants me) {
 		me.setEncoding("utf-8");
-		me.setDevMode(ProsMap.getBooPro("tps.devMode"));
+		me.setDevMode(true);
 		me.setViewType(ViewType.FREE_MARKER); // 设置视图类型，默认为FreeMarker
+		me.setErrorView(401, "/au/login.html");
+		me.setErrorView(403, "/au/login.html");
+		me.setError404View("/404.html");
+		me.setError500View("/500.html");
 	}
 
 	/**
 	 * 配置路由
 	 */
 	public void configRoute(Routes me) {
-		// me.add("/", TpsController.class, "/tps");
 		this.routes = new AutoBindRoutes();
 		me.add(routes);
 	}
@@ -54,19 +59,18 @@ public class AppConfig extends JFinalConfig {
 	 * 配置插件
 	 */
 	public void configPlugin(Plugins me) {
+		// config
+		me.add(new ConfigPlugin("config.properties"));
 		// shiro
-		if (OPEN_SHIRO)
-			me.add(new ShiroPlugin(this.routes));
+		if (ConfigKit.getBoolean("tps.openShiro", true))
+			me.add(new ShiroPlugin(routes, new MyJdbcAuthzService()));
 		// c3p0 数据源插件
-		C3p0Plugin cp = new C3p0Plugin(ProsMap.getStrPro("tps.jdbcUrl"), ProsMap.getStrPro("tps.user"), ProsMap.getStrPro("tps.password"));
+		C3p0Plugin cp = new C3p0Plugin(ConfigKit.getStr("tps.jdbcUrl"), ConfigKit.getStr("tps.user"), ConfigKit.getStr("tps.password"));
 		me.add(cp);
 		// ActiveRecrod 支持插件
 		me.add(new ActiveRecordPlugin(cp));
 		// add EhCache
 		me.add(new EhCachePlugin());
-		// add shrio
-		if (OPEN_SHIRO)
-			me.add(new ShiroPlugin(this.routes));
 	}
 
 	/**
@@ -74,10 +78,8 @@ public class AppConfig extends JFinalConfig {
 	 */
 	public void configInterceptor(Interceptors me) {
 		// shiro
-		if (OPEN_SHIRO)
+		if (ConfigKit.getBoolean("tps.openShiro", true))
 			me.add(new ShiroInterceptor());
-		if (OPEN_SHIRO)
-			me.add(new ShiroFreeMarkerInterceptor());
 		// 让 模版 可以使用session
 		me.add(new SessionInViewInterceptor());
 	}

@@ -1,4 +1,4 @@
-package com.minws.frame.kit.properties;
+package com.minws.frame.kit;
 
 import java.io.InputStreamReader;
 import java.net.URL;
