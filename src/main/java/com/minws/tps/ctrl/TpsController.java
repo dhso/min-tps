@@ -8,18 +8,16 @@
 package com.minws.tps.ctrl;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 import org.apache.http.client.ClientProtocolException;
 
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
-import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
 import com.minws.frame.kit.HttpUtils;
 import com.minws.frame.kit.StringUtils;
-import com.minws.tps.model.ArticleModel;
+import com.minws.frame.route.ControllerBind;
 
+@ControllerBind(controllerKey = "/", viewPath = "tps")
 public class TpsController extends Controller {
 	private static final Logger logger = Logger.getLogger(TpsController.class);
 
