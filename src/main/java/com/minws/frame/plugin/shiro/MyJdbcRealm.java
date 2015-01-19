@@ -16,7 +16,6 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -39,11 +38,11 @@ public class MyJdbcRealm extends AuthorizingRealm {
 		User user = null;
 		String username = userToken.getUsername();
 		if (ValidateKit.isEmail(username)) {
-			user = User.dao.findFirstBy(" `user`.email =? AND `user`.deleted_at is null", username);
+			user = User.dao.findFirstBy("email =? AND deleted_at is null", username);
 		} else if (ValidateKit.isMobile(username)) {
-			user = User.dao.findFirstBy(" `user`.mobile =? AND `user`.deleted_at is null", username);
+			user = User.dao.findFirstBy("mobile =? AND deleted_at is null", username);
 		} else {
-			user = User.dao.findFirstBy(" `user`.username =? AND `user`.deleted_at is null", username);
+			user = User.dao.findFirstBy("username =? AND `user`.deleted_at is null", username);
 		}
 		if (user != null) {
 			SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getStr("password"), getName());
@@ -66,10 +65,10 @@ public class MyJdbcRealm extends AuthorizingRealm {
 		Set<String> roleSet = new LinkedHashSet<String>(); // 角色集合
 		Set<String> permissionSet = new LinkedHashSet<String>(); // 权限集合
 		List<Role> roles = null;
-		User user = User.dao.findFirstBy(" `user`.username =? AND `user`.deleted_at is null", loginName);
+		User user = User.dao.findFirstBy("username =? AND deleted_at is null", loginName);
 		if (user != null) {
 			// 遍历角色
-			roles = Role.dao.findUserBy("", user.getLong("id"));
+			roles = Role.dao.findUserBy(user.getLong("id"));
 		} else {
 			SubjectKit.getSubject().logout();
 		}
@@ -91,7 +90,7 @@ public class MyJdbcRealm extends AuthorizingRealm {
 			// 角色可用
 			if (role.getDate("deleted_at") == null) {
 				roleSet.add(role.getStr("value"));
-				permissions = Permission.dao.findByRole("", role.getLong("id"));
+				permissions = Permission.dao.findByRole(role.getLong("id"));
 				loadAuth(permissionSet, permissions);
 			}
 		}

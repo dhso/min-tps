@@ -1,8 +1,9 @@
-tps.jdbcUrl = jdbc:mysql://rdsneiq3aquyrn2.mysql.rds.aliyuncs.com:3306/r0nceb38ye3lswoa
-tps.user = r0nceb38ye3lswoa
+tps.jdbcUrl = jdbc:mysql://192.168.3.110:3306/tps
+tps.user = root
 tps.password = 923389
 tps.devMode = true
 tps.openShiro = true
+tps.encode = utf-8
 
 tps.cookie.domain = .minws.com
 tps.qqauth.appId = 101167626

@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.shiro.authz.Permission;
-
 import cn.dreampie.shiro.core.JdbcAuthzService;
 import cn.dreampie.shiro.core.handler.AuthzHandler;
 import cn.dreampie.shiro.core.handler.JdbcPermissionAuthzHandler;
@@ -32,11 +30,11 @@ public class MyJdbcAuthzService implements JdbcAuthzService {
 		for (Role role : roles) {
 			// 角色可用
 			if (role.getDate("daleted_at") == null) {
-				permissions = Permission.dao.findByRole("", role.get("id"));
+				permissions = Permission.dao.findByRole(role.get("id"));
 				// 遍历权限
 				for (Permission permission : permissions) {
 					// 权限可用
-					if (permission.getDate("daleted_at") == null) {
+					if (permission.getDate("deleted_at") == null) {
 						if (permission.getStr("url") != null && !permission.getStr("url").isEmpty()) {
 							authzJdbcMaps.put(permission.getStr("url"), new JdbcPermissionAuthzHandler(permission.getStr("value")));
 						}

@@ -1,7 +1,5 @@
 package com.minws.config;
 
-import java.util.Properties;
-
 import cn.dreampie.shiro.core.ShiroInterceptor;
 import cn.dreampie.shiro.core.ShiroPlugin;
 
@@ -20,10 +18,12 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.ViewType;
-import com.minws.frame.config.ConfigKit;
 import com.minws.frame.config.ConfigPlugin;
 import com.minws.frame.handler.SessionHandler;
 import com.minws.frame.plugin.shiro.MyJdbcAuthzService;
+import com.minws.frame.plugin.shiro.Permission;
+import com.minws.frame.plugin.shiro.Role;
+import com.minws.frame.plugin.shiro.User;
 import com.minws.frame.plugin.xss.XssHandler;
 import com.minws.frame.route.AutoBindRoutes;
 
@@ -38,8 +38,9 @@ public class AppConfig extends JFinalConfig {
 	 * 配置常量
 	 */
 	public void configConstant(Constants me) {
-		me.setEncoding("utf-8");
-		me.setDevMode(true);
+		loadPropertyFile("config.txt");
+		me.setEncoding(getProperty("tps.encode"));
+		me.setDevMode(getPropertyToBoolean("tps.devMode"));
 		me.setViewType(ViewType.FREE_MARKER); // 设置视图类型，默认为FreeMarker
 		me.setErrorView(401, "/au/login.html");
 		me.setErrorView(403, "/au/login.html");
@@ -59,18 +60,22 @@ public class AppConfig extends JFinalConfig {
 	 * 配置插件
 	 */
 	public void configPlugin(Plugins me) {
-		// config
-		me.add(new ConfigPlugin("config.properties"));
-		// shiro
-		if (ConfigKit.getBoolean("tps.openShiro", true))
-			me.add(new ShiroPlugin(routes, new MyJdbcAuthzService()));
+		// config插件
+		me.add(new ConfigPlugin("config.txt").reload(false));
 		// c3p0 数据源插件
-		C3p0Plugin cp = new C3p0Plugin(ConfigKit.getStr("tps.jdbcUrl"), ConfigKit.getStr("tps.user"), ConfigKit.getStr("tps.password"));
+		C3p0Plugin cp = new C3p0Plugin(getProperty("tps.jdbcUrl"), getProperty("tps.user"), getProperty("tps.password"));
 		me.add(cp);
 		// ActiveRecrod 支持插件
-		me.add(new ActiveRecordPlugin(cp));
+		ActiveRecordPlugin arp = new ActiveRecordPlugin(cp);
+		me.add(arp);
+		arp.addMapping("sys_user", "id", User.class);
+		arp.addMapping("sys_role", "id", Role.class);
+		arp.addMapping("sys_permission", "id", Permission.class);
 		// add EhCache
 		me.add(new EhCachePlugin());
+		// shiro
+		if (getPropertyToBoolean("tps.openShiro", true))
+			me.add(new ShiroPlugin(routes, new MyJdbcAuthzService()));
 	}
 
 	/**
@@ -78,7 +83,7 @@ public class AppConfig extends JFinalConfig {
 	 */
 	public void configInterceptor(Interceptors me) {
 		// shiro
-		if (ConfigKit.getBoolean("tps.openShiro", true))
+		if (getPropertyToBoolean("tps.openShiro", true))
 			me.add(new ShiroInterceptor());
 		// 让 模版 可以使用session
 		me.add(new SessionInViewInterceptor());
