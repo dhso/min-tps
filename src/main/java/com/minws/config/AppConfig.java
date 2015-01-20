@@ -44,8 +44,8 @@ public class AppConfig extends JFinalConfig {
 		me.setViewType(ViewType.FREE_MARKER); // 设置视图类型，默认为FreeMarker
 		me.setError401View("/page/login.html");
 		me.setError403View("/page/login.html");
-		me.setError404View("/page/404.html");
-		me.setError500View("/page/500.html");
+		me.setError404View("/page/error/404.html");
+		me.setError500View("/page/error/500.html");
 	}
 
 	/**
