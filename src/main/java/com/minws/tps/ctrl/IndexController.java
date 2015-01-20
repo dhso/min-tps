@@ -10,22 +10,18 @@ package com.minws.tps.ctrl;
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
-
-import cn.dreampie.shiro.freemarker.ShiroTags;
+import org.apache.shiro.SecurityUtils;
 
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
-import com.jfinal.render.FreeMarkerRender;
 import com.minws.frame.kit.HttpUtils;
 import com.minws.frame.kit.StringUtils;
 import com.minws.frame.route.ControllerBind;
 
 @ControllerBind(controllerKey = "/", viewPath = "tps")
-public class TpsController extends Controller {
-	private static final Logger logger = Logger.getLogger(TpsController.class);
+public class IndexController extends Controller {
+	private static final Logger logger = Logger.getLogger(IndexController.class);
 	
-	@RequiresAuthentication
 	public void index() {
 		// List list = QiniuKit.list(ProsMap.getStrPro("wish.qiniu.bucket"));
 		// Integer pageNumber = 1;
@@ -37,11 +33,14 @@ public class TpsController extends Controller {
 		// 	it.next().set("content", StringUtils.rabbr(StringUtils.replaceHtml(it.next().get("content").toString()), 200));
 		// }
 		// setAttr("page", page);
-		FreeMarkerRender.getConfiguration().setSharedVariable("shiro", new ShiroTags());
-		render("index.ftl");
-		return;
+		if(SecurityUtils.getSubject().isAuthenticated()){
+			render("index.ftl");
+		}else{
+			redirect("/auth/login");
+			return;
+		}
 	}
-
+	
 	public void qqLogin() throws ClientProtocolException, IOException {
 		String openId = getPara("openid", "");
 		String accessToken = getPara("access_token", "");

@@ -1,7 +1,12 @@
 package com.minws.config;
 
+import cn.dreampie.routebind.RouteBind;
 import cn.dreampie.shiro.core.ShiroInterceptor;
 import cn.dreampie.shiro.core.ShiroPlugin;
+import cn.dreampie.shiro.freemarker.ShiroTags;
+import cn.dreampie.sqlinxml.SqlInXmlPlugin;
+import cn.dreampie.tablebind.SimpleNameStyles;
+import cn.dreampie.tablebind.TableBindPlugin;
 
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -15,15 +20,17 @@ import com.jfinal.ext.handler.FakeStaticHandler;
 import com.jfinal.ext.handler.UrlSkipHandler;
 import com.jfinal.ext.interceptor.SessionInViewInterceptor;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
+import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
+import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
+import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.ViewType;
-import com.minws.frame.config.ConfigPlugin;
 import com.minws.frame.handler.SessionHandler;
 import com.minws.frame.plugin.shiro.MyJdbcAuthzService;
-import com.minws.frame.plugin.shiro.Permission;
-import com.minws.frame.plugin.shiro.Role;
-import com.minws.frame.plugin.shiro.User;
+import com.minws.frame.plugin.shiro.model.Permission;
+import com.minws.frame.plugin.shiro.model.Role;
+import com.minws.frame.plugin.shiro.model.User;
 import com.minws.frame.plugin.xss.XssHandler;
 import com.minws.frame.route.AutoBindRoutes;
 
@@ -52,8 +59,9 @@ public class AppConfig extends JFinalConfig {
 	 * 配置路由
 	 */
 	public void configRoute(Routes me) {
-		this.routes = new AutoBindRoutes();
-		me.add(routes);
+		this.routes = me;
+		RouteBind routeBind = new RouteBind();
+		me.add(routeBind);
 	}
 
 	/**
@@ -61,16 +69,27 @@ public class AppConfig extends JFinalConfig {
 	 */
 	public void configPlugin(Plugins me) {
 		// config插件
-		me.add(new ConfigPlugin("config.txt").reload(false));
+		//me.add(new ConfigPlugin("config.txt").reload(false));
 		// c3p0 数据源插件
 		C3p0Plugin cp = new C3p0Plugin(getProperty("tps.jdbcUrl"), getProperty("tps.user"), getProperty("tps.password"));
 		me.add(cp);
+		
 		// ActiveRecrod 支持插件
-		ActiveRecordPlugin arp = new ActiveRecordPlugin(cp);
-		me.add(arp);
-		arp.addMapping("sys_user", "id", User.class);
-		arp.addMapping("sys_role", "id", Role.class);
-		arp.addMapping("sys_permission", "id", Permission.class);
+		//ActiveRecordPlugin arp = new ActiveRecordPlugin(cp);
+		//me.add(arp);
+		//arp.addMapping("sys_user", "id", User.class);
+		//arp.addMapping("sys_role", "id", Role.class);
+		//arp.addMapping("sys_permission", "id", Permission.class);
+		
+		//Model自动绑定表插件
+	    TableBindPlugin atbp = new TableBindPlugin(cp, SimpleNameStyles.LOWER);
+	    atbp.setContainerFactory(new CaseInsensitiveContainerFactory(true)); //忽略字段大小写
+	    atbp.setShowSql(getPropertyToBoolean("tps.devMode"));
+	    me.add(atbp);
+	    
+	    //sql语句plugin
+	    me.add(new SqlInXmlPlugin());
+	    
 		// add EhCache
 		me.add(new EhCachePlugin());
 		// shiro
@@ -98,9 +117,9 @@ public class AppConfig extends JFinalConfig {
 		// xss 过滤
 		me.add(new XssHandler("s"));
 		// 伪静态处理
-		me.add(new FakeStaticHandler());
+		//me.add(new FakeStaticHandler());
 		// 去掉 jsessionid 防止找不到action
-		me.add(new SessionHandler());
+		//me.add(new SessionHandler());
 		me.add(new UrlSkipHandler(".*/static/.*", false));
 		me.add(new ContextPathHandler("baseUrl"));
 	}
@@ -115,6 +134,8 @@ public class AppConfig extends JFinalConfig {
 
 	@Override
 	public void afterJFinalStart() {
+		super.afterJFinalStart();
+		FreeMarkerRender.getConfiguration().setSharedVariable("shiro", new ShiroTags());
 		// HttpUtils.setProxy(ProsMap.getStrPro("tps.local.proxy.http.host"),
 		// ProsMap.getStrPro("tps.local.proxy.http.port"),
 		// ProsMap.getStrPro("tps.local.proxy.auth.username"),

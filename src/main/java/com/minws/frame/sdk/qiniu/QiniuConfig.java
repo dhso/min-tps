@@ -7,7 +7,6 @@ package com.minws.frame.sdk.qiniu;
 import org.json.JSONException;
 
 import com.jfinal.log.Logger;
-import com.minws.frame.config.ConfigKit;
 import com.qiniu.api.auth.AuthException;
 import com.qiniu.api.auth.digest.Mac;
 import com.qiniu.api.rs.PutPolicy;
@@ -17,8 +16,8 @@ import com.qiniu.api.rsf.RSFClient;
 public class QiniuConfig {
 	private static final Logger logger = Logger.getLogger(QiniuConfig.class);
 
-	private String ak = ConfigKit.getStr("wish.qiniu.ak");
-	private String sk = ConfigKit.getStr("wish.qiniu.sk");
+	private String ak = "wish.qiniu.ak";
+	private String sk = "wish.qiniu.sk";
 
 	public String getToken(String bucketName) {
 		Mac mac = new Mac(ak, sk);

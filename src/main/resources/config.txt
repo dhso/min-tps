@@ -1,5 +1,5 @@
-#tps.jdbcUrl = jdbc:mysql://192.168.3.110:3306/tps
-tps.jdbcUrl = jdbc:mysql://127.0.0.1:3306/tps
+tps.jdbcUrl = jdbc:mysql://192.168.3.110:3306/cms
+#tps.jdbcUrl = jdbc:mysql://127.0.0.1:3306/cms
 tps.user = root
 tps.password = 923389
 tps.devMode = true
