@@ -10,6 +10,7 @@ package com.minws.tps.ctrl;
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 
 import cn.dreampie.shiro.freemarker.ShiroTags;
 
@@ -23,7 +24,8 @@ import com.minws.frame.route.ControllerBind;
 @ControllerBind(controllerKey = "/", viewPath = "tps")
 public class TpsController extends Controller {
 	private static final Logger logger = Logger.getLogger(TpsController.class);
-
+	
+	@RequiresAuthentication
 	public void index() {
 		// List list = QiniuKit.list(ProsMap.getStrPro("wish.qiniu.bucket"));
 		// Integer pageNumber = 1;
