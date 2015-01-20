@@ -7,12 +7,23 @@
 	<div class="m-head">啦啦啦</div>
 	<div class="blank-split"></div>
 	<div class="m-content">
-		<#if hasAnyRoles("admin","user")>
-			<input type="button" value="查看" />
-		</#if>
-		<#if hasRole("admin")>
-			<input type="button" value="编辑" />
-		</#if>
+		<@shiro.authenticated>
+		  <li><a href="/user/center"><@shiro.principal name="full_name"/></a></li>
+		      |
+		  <li><a href="/signout">退出</a></li>
+		</@shiro.authenticated>
+		<@shiro.notAuthenticated>
+		  <li><a href="login">登陆</a></li>
+		</@shiro.notAuthenticated>
+		<@shiro.isLoginFailure name="shiroLoginFailure">
+		  <@shiro.loginException name="shiroLoginFailure"/>
+		</@shiro.isLoginFailure>
+		<@shiro.hasRole name="ROLE_ADMIN">
+		我是admin
+		</@shiro.hasRole>
+		<@shiro.hasPermission name="P_ORDER_CONTROL">
+		  <li><a href="/order/branch" class="<#if activebar=='branch'>nav-active</#if>">全部订单</a></li>
+		</@shiro.hasPermission>
 	</div>
 	<div class="m-foot"><#include "common/foot.ftl" encoding="UTF-8">
 	</div>

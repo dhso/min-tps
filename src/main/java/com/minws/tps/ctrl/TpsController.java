@@ -11,8 +11,11 @@ import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 
+import cn.dreampie.shiro.freemarker.ShiroTags;
+
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
+import com.jfinal.render.FreeMarkerRender;
 import com.minws.frame.kit.HttpUtils;
 import com.minws.frame.kit.StringUtils;
 import com.minws.frame.route.ControllerBind;
@@ -32,6 +35,7 @@ public class TpsController extends Controller {
 		// 	it.next().set("content", StringUtils.rabbr(StringUtils.replaceHtml(it.next().get("content").toString()), 200));
 		// }
 		// setAttr("page", page);
+		FreeMarkerRender.getConfiguration().setSharedVariable("shiro", new ShiroTags());
 		render("index.ftl");
 		return;
 	}

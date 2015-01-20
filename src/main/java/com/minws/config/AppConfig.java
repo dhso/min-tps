@@ -42,10 +42,10 @@ public class AppConfig extends JFinalConfig {
 		me.setEncoding(getProperty("tps.encode"));
 		me.setDevMode(getPropertyToBoolean("tps.devMode"));
 		me.setViewType(ViewType.FREE_MARKER); // 设置视图类型，默认为FreeMarker
-		me.setErrorView(401, "/au/login.html");
-		me.setErrorView(403, "/au/login.html");
-		me.setError404View("/404.html");
-		me.setError500View("/500.html");
+		me.setError401View("/page/login.html");
+		me.setError403View("/page/login.html");
+		me.setError404View("/page/404.html");
+		me.setError500View("/page/500.html");
 	}
 
 	/**
