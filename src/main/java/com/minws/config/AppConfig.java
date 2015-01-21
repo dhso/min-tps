@@ -40,14 +40,13 @@ public class AppConfig extends JFinalConfig {
 		loadPropertyFile("config.txt");
 		me.setEncoding(getProperty("tps.encode"));
 		me.setDevMode(getPropertyToBoolean("tps.devMode"));
-		me.setViewType(ViewType.JSP); // 设置视图类型，默认为FreeMarker
-		me.setBaseViewPath("/pages/");
+		me.setViewType(ViewType.FREE_MARKER); // 设置视图类型，默认为FreeMarker
 		// me.setErrorView(401, "/WEB-INF/pages/login.html");
 		// me.setErrorView(403, "/WEB-INF/pages/login.html");
-		me.setError401View("/err401");
-		me.setError403View("/err403");
-		me.setError404View("/err404");
-		me.setError500View("/err500");
+		me.setError401View("/security/login");
+		me.setError403View("/security/login");
+		me.setError404View("/security/err404");
+		me.setError500View("/security/err500");
 		me.setErrorRenderFactory(new IErrorRenderFactory() {
 			@Override
 			public Render getRender(int errorCode, String view) {

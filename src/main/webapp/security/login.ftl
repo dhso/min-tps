@@ -14,7 +14,7 @@
 <body>
     <div class="easyui-panel" title="登录" style="width:260px;" data-options="cls:'login-pannel'">
         <div style="padding:10px">
-        <form id="login_form" action="${baseUrl}/auth/signin" method="post">
+        <form id="login_form" action="${baseUrl}/security/signin" method="post">
             <table cellpadding="5">
                 <tr>
                     <td>用户:</td>
