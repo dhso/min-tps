@@ -14,18 +14,21 @@ import com.jfinal.ext.route.ControllerBind;
 @ControllerBind(controllerKey = "/security", viewPath = "/security")
 public class SecurityController extends Controller {
 
+	//默认登录页面
     public void index() {
         render("login.ftl");
     }
 
+    //登录页面
     public void login() {
     	render("login.ftl");
     }
 
+    //登录Action
     public void signin() {
 		String username = getPara("username");
 		String password = getPara("password");
-		String rememberMe = getPara("rememberMe");
+		Boolean rememberMe = "on".equalsIgnoreCase(getPara("rememberMe","off"));
 		Subject currentUser = SecurityUtils.getSubject();
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
 		try {
@@ -33,11 +36,15 @@ public class SecurityController extends Controller {
 			redirect("/");
 		} catch (Exception e) {
 			// 登录失败
-			e.printStackTrace();
-			forwardAction("/login");
+			String esn = e.getClass().getSimpleName();
+			if("IncorrectCredentialsException".equalsIgnoreCase(esn)){
+				setAttr("errorMsg", "用户名或者密码不正确！");
+			}
+			forwardAction("/security/login");
 		}
 	}
 
+    //登出Action
 	public void signout() {
 		Subject currentUser = SecurityUtils.getSubject();
 		if (currentUser.isAuthenticated()) {
@@ -46,6 +53,18 @@ public class SecurityController extends Controller {
 		forwardAction("/security/login");
 	}
 
+	public void err401() {
+		setAttr("msg", "401 Unauthorized");
+		setAttr("success", false);
+		renderJson();
+	}
+
+	public void err403() {
+		setAttr("msg", "403 Forbidden");
+		setAttr("success", false);
+		renderJson();
+	}
+	
     public void err404() {
         render("error/404.ftl");
     }

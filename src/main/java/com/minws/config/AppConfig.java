@@ -41,10 +41,8 @@ public class AppConfig extends JFinalConfig {
 		me.setEncoding(getProperty("tps.encode"));
 		me.setDevMode(getPropertyToBoolean("tps.devMode"));
 		me.setViewType(ViewType.FREE_MARKER); // 设置视图类型，默认为FreeMarker
-		// me.setErrorView(401, "/WEB-INF/pages/login.html");
-		// me.setErrorView(403, "/WEB-INF/pages/login.html");
 		me.setError401View("/security/login");
-		me.setError403View("/security/login");
+		me.setError403View("/security/err403");
 		me.setError404View("/security/err404");
 		me.setError500View("/security/err500");
 		me.setErrorRenderFactory(new IErrorRenderFactory() {

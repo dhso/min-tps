@@ -9,6 +9,16 @@
 	.login-pannel{
 		margin:200px auto;
 	}
+	.error{
+		background-color: #fcf8e3;
+		border: 1px solid #fbeed5;
+		color: #c09853;
+		text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+		padding: 5px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		border-radius: 4px;
+	}
 	</style>
 </head>
 <body>
@@ -16,6 +26,13 @@
         <div style="padding:10px">
         <form id="login_form" action="${baseUrl}/security/signin" method="post">
             <table cellpadding="5">
+            	<#if errorMsg??>
+                <tr>
+                	<td colspan=2>
+	                	<span class="error">${errorMsg}</span>
+					</td>
+                </tr>
+                </#if>
                 <tr>
                     <td>用户:</td>
                     <td><input class="easyui-textbox" type="text" name="username" id="username" data-options="required:true,missingMessage:'请输入用户名/手机号'"></input></td>
@@ -27,7 +44,7 @@
                 <tr>
                 	<td colspan=2>
                 		<input type="checkbox" name="rememberMe" id="rememberMe" checked="checked" /><label for="rememberMe">记住我</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">登录</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                		<button type="submit" class="easyui-linkbutton">登录</button>
 						<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">重置</a>
 					</td>
                 </tr>
@@ -38,9 +55,6 @@
     <script type="text/javascript" src="${baseUrl}/static/easyui/jquery.min.js"></script>
 	<script type="text/javascript" src="${baseUrl}/static/easyui/jquery.easyui.min.js"></script>
     <script>
-    	function submitForm(){
-    		$('#login_form').form('submit');
-    	}
         function clearForm(){
             $('#login_form').form('clear');
         }

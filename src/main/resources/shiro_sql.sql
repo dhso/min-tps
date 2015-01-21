@@ -253,3 +253,128 @@ VALUES (1,1,0,0,1,2,3,'人民大学',current_timestamp);
 -- create user_role--
 INSERT INTO sys_user_role(id, user_id, role_id)
 VALUES (1,1,1);
+
+
+
+
+
+-----v3-------------
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : mysql
+ Source Server Type    : MySQL
+ Source Server Version : 50614
+ Source Host           : localhost
+ Source Database       : jfinal_shiro
+
+ Target Server Type    : MySQL
+ Target Server Version : 50614
+ File Encoding         : utf-8
+
+ Date: 02/26/2014 23:41:40 PM
+*/
+
+SET NAMES utf8;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+--  Table structure for `permissions`
+-- ----------------------------
+DROP TABLE IF EXISTS `permissions`;
+CREATE TABLE `permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `permission` varchar(45) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `permissions`
+-- ----------------------------
+BEGIN;
+INSERT INTO `permissions` VALUES ('1', 'editUser', null, '2014-02-26 17:50:14'), ('2', 'showUser', null, '2014-02-26 17:50:26'), ('3', 'addUser', null, '2014-02-26 17:50:37'), ('4', 'deleteUser', null, '2014-02-26 17:51:11');
+COMMIT;
+
+-- ----------------------------
+--  Table structure for `roles`
+-- ----------------------------
+DROP TABLE IF EXISTS `roles`;
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(45) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `roles`
+-- ----------------------------
+BEGIN;
+INSERT INTO `roles` VALUES ('1', 'admin', 'admin user'), ('2', 'user', 'user');
+COMMIT;
+
+-- ----------------------------
+--  Table structure for `roles_permissions`
+-- ----------------------------
+DROP TABLE IF EXISTS `roles_permissions`;
+CREATE TABLE `roles_permissions` (
+  `role_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`role_id`,`permission_id`),
+  KEY `rolse_permissions_permissions_id_fk_idx` (`permission_id`),
+  CONSTRAINT `rolse_permissions_roles_id_fk` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `rolse_permissions_permissions_id_fk` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `roles_permissions`
+-- ----------------------------
+BEGIN;
+INSERT INTO `roles_permissions` VALUES ('1', '1', '2014-02-26 17:52:23'), ('1', '2', '2014-02-26 17:52:30'), ('1', '3', '2014-02-26 17:52:38'), ('1', '4', '2014-02-26 17:52:44'), ('2', '2', '2014-02-26 17:52:51');
+COMMIT;
+
+-- ----------------------------
+--  Table structure for `user_roles`
+-- ----------------------------
+DROP TABLE IF EXISTS `user_roles`;
+CREATE TABLE `user_roles` (
+  `user_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`,`role_id`),
+  KEY `user_roles_roles_id_fk_idx` (`role_id`),
+  CONSTRAINT `user_roles_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `user_roles_roles_id_fk` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `user_roles`
+-- ----------------------------
+BEGIN;
+INSERT INTO `user_roles` VALUES ('1', '1', '2014-02-26 17:51:56'), ('1', '2', '2014-02-26 20:46:55'), ('2', '2', '2014-02-26 17:52:00'), ('3', '1', '2014-02-26 23:34:06');
+COMMIT;
+
+-- ----------------------------
+--  Table structure for `users`
+-- ----------------------------
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0未激活   1激活   2注销',
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `users`
+-- ----------------------------
+BEGIN;
+INSERT INTO `users` VALUES ('1', 'xiaoming', 'xiaoming', '1', '2014-02-26 17:44:21'), ('2', 'xiaohong', 'xiaohong', '1', '2014-02-26 17:44:45'), ('3', 'xiaohuang', 'xiaohuang', '1', '2014-02-26 23:31:20');
+COMMIT;
+
+SET FOREIGN_KEY_CHECKS = 1;
