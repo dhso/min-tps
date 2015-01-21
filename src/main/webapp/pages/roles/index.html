@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+    <meta charset="UTF-8">
+    <title>Roles Admin | WebDemo</title>
+</head>
+<body>
+<h1>Roles Admin Page</h1>
+<hr />
+<h2>Ftl Test</h2>
+<#setting number_format="currency" />
+<#assign answer=42 />
+${answer}  <#-- ￥42.00 -->
+${answer?string}  <#-- ￥42.00 -->
+${answer?string.number}  <#-- 42 -->
+${answer?string.currency}  <#-- ￥42.00 -->
+${answer?string.percent}  <#-- 42,00％ -->
+</body>
+</html>

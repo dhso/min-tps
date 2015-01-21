@@ -1,0 +1,21 @@
+<#global cache=JspTaglibs["/WEB-INF/classes/shiro.tld"]>
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+    <meta charset="UTF-8">
+    <title>WebDemo</title>
+</head>
+<body>
+<h1>Index Page</h1>
+<span style="position: relative; float: right">Welcome! <@shiro.principle property="name" /></span>
+<hr />
+<h2>Ftl Test</h2>
+<#setting number_format="currency" />
+<#assign answer=42 />
+${answer}  <#-- ￥42.00 -->
+${answer?string}  <#-- ￥42.00 -->
+${answer?string.number}  <#-- 42 -->
+${answer?string.currency}  <#-- ￥42.00 -->
+${answer?string.percent}  <#-- 42,00％ -->
+</body>
+</html>

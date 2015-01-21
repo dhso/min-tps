@@ -1,10 +1,16 @@
-tps.jdbcUrl = jdbc:mysql://192.168.3.110:3306/cms
-#tps.jdbcUrl = jdbc:mysql://127.0.0.1:3306/cms
-tps.user = root
-tps.password = 923389
+tps.jdbcDriver=com.mysql.jdbc.Driver
+#tps.jdbcUrl = jdbc:mysql://192.168.3.110:3306/cms
+tps.jdbcUrl = jdbc:mysql://127.0.0.1:3306/cms
+tps.jdbcUser = root
+tps.jdbcPassword = 923389
 tps.devMode = true
 tps.openShiro = true
 tps.encode = utf-8
+
+# Connection Pool settings
+tps.poolInitialSize=10
+tps.poolMaxSize=20
+tps.connectionTimeoutMillis=1000
 
 tps.cookie.domain = .minws.com
 tps.qqauth.appId = 101167626

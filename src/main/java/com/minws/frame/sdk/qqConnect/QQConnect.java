@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.minws.frame.kit.StringUtils;
+import com.minws.frame.kit.StringKit;
 import com.minws.frame.sdk.ace.AceKit;
 
 public class QQConnect {
@@ -29,12 +29,12 @@ public class QQConnect {
 		String AccessTokenRes = AceKit.httpGet(accessTokenUrl);
 		String accessToken = "";
 		Integer expiresIn = -1;
-		if (StringUtils.isNotBlank(AccessTokenRes)) {
-			Map<String, Object> mapres = StringUtils.getUrlParams(AccessTokenRes);
+		if (StringKit.isNotBlank(AccessTokenRes)) {
+			Map<String, Object> mapres = StringKit.getUrlParams(AccessTokenRes);
 			Object accessTokenObj = mapres.get("access_token");
 			accessToken = (null != accessTokenObj) ? accessTokenObj.toString() : "";
 			Object expiresInObj = mapres.get("expires_in");
-			expiresIn = (null != expiresInObj) ? StringUtils.toInteger(expiresInObj.toString()) : -1;
+			expiresIn = (null != expiresInObj) ? StringKit.toInteger(expiresInObj.toString()) : -1;
 		}
 		return new QQToken(accessToken, expiresIn);
 	}
@@ -50,12 +50,12 @@ public class QQConnect {
 	public static QQMe getMe(String accessToken) throws JsonProcessingException, IOException {
 		String openId = "";
 		String clientId = "";
-		if (StringUtils.isNotBlank(accessToken)) {
+		if (StringKit.isNotBlank(accessToken)) {
 			String openIdUrl = "https://graph.qq.com/oauth2.0/me?access_token=" + accessToken;
 			String openIdRes = AceKit.httpGet(openIdUrl);
-			if (StringUtils.isNotBlank(openIdRes)) {
-				openIdRes = StringUtils.replace(openIdRes, "callback(", "");
-				openIdRes = StringUtils.replace(openIdRes, ");", "");
+			if (StringKit.isNotBlank(openIdRes)) {
+				openIdRes = StringKit.replace(openIdRes, "callback(", "");
+				openIdRes = StringKit.replace(openIdRes, ");", "");
 				JsonNode rootNode = new ObjectMapper().readTree(openIdRes);
 				clientId = rootNode.path("client_id").asText();
 				openId = rootNode.path("openid").asText();
@@ -77,7 +77,7 @@ public class QQConnect {
 	 */
 	public static String getUserInfoStr(String accessToken, String clientId, String openId) throws JsonParseException, JsonMappingException, IOException {
 		String userInfoRes = "";
-		if (StringUtils.isNotBlank(openId) && StringUtils.isNotBlank(clientId)) {
+		if (StringKit.isNotBlank(openId) && StringKit.isNotBlank(clientId)) {
 			String userInfoUrl = "https://graph.qq.com/user/get_user_info?access_token=" + accessToken + "&oauth_consumer_key=" + clientId + "&openid=" + openId;
 			userInfoRes = AceKit.httpGet(userInfoUrl);
 		}
@@ -95,7 +95,7 @@ public class QQConnect {
 	 */
 	public static QQUserInfo convertUserInfoStr2UserInfo(String qqUserInfoStr) throws JsonParseException, JsonMappingException, IOException {
 		QQUserInfo qqUserInfo = new QQUserInfo();
-		if (StringUtils.isNotBlank(qqUserInfoStr)) {
+		if (StringKit.isNotBlank(qqUserInfoStr)) {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
 			mapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);

@@ -1,38 +1,24 @@
 package com.minws.config;
 
-import cn.dreampie.routebind.RouteBind;
-import cn.dreampie.shiro.core.ShiroInterceptor;
-import cn.dreampie.shiro.core.ShiroPlugin;
-import cn.dreampie.shiro.freemarker.ShiroTags;
-import cn.dreampie.sqlinxml.SqlInXmlPlugin;
-import cn.dreampie.tablebind.SimpleNameStyles;
-import cn.dreampie.tablebind.TableBindPlugin;
-
-import com.jfinal.config.Constants;
-import com.jfinal.config.Handlers;
-import com.jfinal.config.Interceptors;
-import com.jfinal.config.JFinalConfig;
-import com.jfinal.config.Plugins;
-import com.jfinal.config.Routes;
+import com.alibaba.druid.filter.stat.StatFilter;
+import com.jfinal.config.*;
 import com.jfinal.core.JFinal;
 import com.jfinal.ext.handler.ContextPathHandler;
-import com.jfinal.ext.handler.FakeStaticHandler;
 import com.jfinal.ext.handler.UrlSkipHandler;
 import com.jfinal.ext.interceptor.SessionInViewInterceptor;
-import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
+import com.jfinal.ext.plugin.shiro.ShiroInterceptor;
+import com.jfinal.ext.plugin.shiro.ShiroPlugin;
+import com.jfinal.ext.plugin.sqlinxml.SqlInXmlPlugin;
+import com.jfinal.ext.plugin.tablebind.AutoTableBindPlugin;
+import com.jfinal.ext.plugin.tablebind.SimpleNameStyles;
+import com.jfinal.ext.route.AutoBindRoutes;
 import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
-import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
-import com.jfinal.render.FreeMarkerRender;
+import com.jfinal.render.IErrorRenderFactory;
+import com.jfinal.render.RedirectRender;
+import com.jfinal.render.Render;
 import com.jfinal.render.ViewType;
-import com.minws.frame.handler.SessionHandler;
-import com.minws.frame.plugin.shiro.MyJdbcAuthzService;
-import com.minws.frame.plugin.shiro.model.Permission;
-import com.minws.frame.plugin.shiro.model.Role;
-import com.minws.frame.plugin.shiro.model.User;
-import com.minws.frame.plugin.xss.XssHandler;
-import com.minws.frame.route.AutoBindRoutes;
 
 /**
  * API引导式配置
@@ -44,66 +30,69 @@ public class AppConfig extends JFinalConfig {
 	/**
 	 * 配置常量
 	 */
+	@Override
 	public void configConstant(Constants me) {
 		loadPropertyFile("config.txt");
 		me.setEncoding(getProperty("tps.encode"));
 		me.setDevMode(getPropertyToBoolean("tps.devMode"));
-		me.setViewType(ViewType.FREE_MARKER); // 设置视图类型，默认为FreeMarker
-		me.setError401View("/page/login.html");
-		me.setError403View("/page/login.html");
-		me.setError404View("/page/error/404.html");
-		me.setError500View("/page/error/500.html");
+		me.setViewType(ViewType.JSP); // 设置视图类型，默认为FreeMarker
+		me.setBaseViewPath("/pages/");
+		// me.setErrorView(401, "/WEB-INF/pages/login.html");
+		// me.setErrorView(403, "/WEB-INF/pages/login.html");
+		me.setError401View("/err401");
+		me.setError403View("/err403");
+		me.setError404View("/err404");
+		me.setError500View("/err500");
+		me.setErrorRenderFactory(new IErrorRenderFactory() {
+			@Override
+			public Render getRender(int errorCode, String view) {
+				return new RedirectRender(view);
+			}
+		});
 	}
 
 	/**
 	 * 配置路由
 	 */
+	@Override
 	public void configRoute(Routes me) {
 		this.routes = me;
-		RouteBind routeBind = new RouteBind();
-		me.add(routeBind);
+		me.add(new AutoBindRoutes());
 	}
 
 	/**
 	 * 配置插件
 	 */
+	@Override
 	public void configPlugin(Plugins me) {
-		// config插件
-		//me.add(new ConfigPlugin("config.txt").reload(false));
-		// c3p0 数据源插件
-		C3p0Plugin cp = new C3p0Plugin(getProperty("tps.jdbcUrl"), getProperty("tps.user"), getProperty("tps.password"));
-		me.add(cp);
-		
-		// ActiveRecrod 支持插件
-		//ActiveRecordPlugin arp = new ActiveRecordPlugin(cp);
-		//me.add(arp);
-		//arp.addMapping("sys_user", "id", User.class);
-		//arp.addMapping("sys_role", "id", Role.class);
-		//arp.addMapping("sys_permission", "id", Permission.class);
-		
-		//Model自动绑定表插件
-	    TableBindPlugin atbp = new TableBindPlugin(cp, SimpleNameStyles.LOWER);
-	    atbp.setContainerFactory(new CaseInsensitiveContainerFactory(true)); //忽略字段大小写
-	    atbp.setShowSql(getPropertyToBoolean("tps.devMode"));
-	    me.add(atbp);
-	    
-	    //sql语句plugin
-	    me.add(new SqlInXmlPlugin());
-	    
-		// add EhCache
-		me.add(new EhCachePlugin());
-		// shiro
 		if (getPropertyToBoolean("tps.openShiro", true))
-			me.add(new ShiroPlugin(routes, new MyJdbcAuthzService()));
+			me.add(new ShiroPlugin(routes));
+		me.add(new EhCachePlugin());
+		// 配置数据库连接池插件
+		DruidPlugin druidPlugin = new DruidPlugin(getProperty("tps.jdbcUrl"), getProperty("tps.jdbcUser"), getProperty("tps.jdbcPassword"), getProperty("tps.jdbcDriver"));
+
+		druidPlugin.addFilter(new StatFilter());
+		me.add(druidPlugin);
+
+		// 添加自动绑定model与表插件
+		AutoTableBindPlugin autoTableBindPlugin = new AutoTableBindPlugin(druidPlugin, SimpleNameStyles.LOWER_UNDERLINE);
+		autoTableBindPlugin.setShowSql(true);
+		autoTableBindPlugin.setContainerFactory(new CaseInsensitiveContainerFactory());
+		// autoTableBindPlugin.setAutoScan(false);
+		me.add(autoTableBindPlugin);
+		if (getPropertyToBoolean("tps.devMode", false))
+			me.add(new SqlInXmlPlugin());
 	}
 
 	/**
 	 * 配置全局拦截器
 	 */
+	@Override
 	public void configInterceptor(Interceptors me) {
 		// shiro
 		if (getPropertyToBoolean("tps.openShiro", true))
 			me.add(new ShiroInterceptor());
+
 		// 让 模版 可以使用session
 		me.add(new SessionInViewInterceptor());
 	}
@@ -111,15 +100,14 @@ public class AppConfig extends JFinalConfig {
 	/**
 	 * 配置处理器
 	 */
+	@Override
 	public void configHandler(Handlers me) {
 		// 计算每个page 运行时间
 		// me.add(new RenderingTimeHandler());
-		// xss 过滤
-		me.add(new XssHandler("s"));
 		// 伪静态处理
-		//me.add(new FakeStaticHandler());
+		// me.add(new FakeStaticHandler());
 		// 去掉 jsessionid 防止找不到action
-		//me.add(new SessionHandler());
+		// me.add(new SessionHandler());
 		me.add(new UrlSkipHandler(".*/static/.*", false));
 		me.add(new ContextPathHandler("baseUrl"));
 	}
@@ -135,7 +123,6 @@ public class AppConfig extends JFinalConfig {
 	@Override
 	public void afterJFinalStart() {
 		super.afterJFinalStart();
-		FreeMarkerRender.getConfiguration().setSharedVariable("shiro", new ShiroTags());
 		// HttpUtils.setProxy(ProsMap.getStrPro("tps.local.proxy.http.host"),
 		// ProsMap.getStrPro("tps.local.proxy.http.port"),
 		// ProsMap.getStrPro("tps.local.proxy.auth.username"),
