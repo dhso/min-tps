@@ -1,7 +1,12 @@
 package com.minws.config;
 
 import com.alibaba.druid.filter.stat.StatFilter;
-import com.jfinal.config.*;
+import com.jfinal.config.Constants;
+import com.jfinal.config.Handlers;
+import com.jfinal.config.Interceptors;
+import com.jfinal.config.JFinalConfig;
+import com.jfinal.config.Plugins;
+import com.jfinal.config.Routes;
 import com.jfinal.core.JFinal;
 import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.ext.handler.UrlSkipHandler;
