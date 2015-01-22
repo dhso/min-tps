@@ -26,26 +26,31 @@ public class SecurityController extends Controller {
 
 	// 登录Action
 	public void signin() {
-		String username = getPara("username");
-		String password = getPara("password");
-		Boolean rememberMe = "on".equalsIgnoreCase(getPara("rememberMe", "off"));
-		Subject currentUser = SecurityUtils.getSubject();
-		UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
-		try {
-			currentUser.login(token);
-			redirect("/");
-		} catch (Exception e) {
-			// 登录失败
-			String esn = e.getClass().getSimpleName();
-			if ("IncorrectCredentialsException".equalsIgnoreCase(esn)) {
-				setAttr("errorMsg", "用户名或者密码不正确！");
-			} else if ("UnknownAccountException".equalsIgnoreCase(esn)) {
-				setAttr("errorMsg", "用户名不存在！");
-			} else {
-				setAttr("errorMsg", "未知错误！");
-			}
+		if ("GET".equalsIgnoreCase(this.getRequest().getMethod().toUpperCase())) {
 			forwardAction("/security/login");
+		} else if ("POST".equalsIgnoreCase(this.getRequest().getMethod().toUpperCase())) {
+			String username = getPara("username");
+			String password = getPara("password");
+			Boolean rememberMe = "on".equalsIgnoreCase(getPara("rememberMe", "off"));
+			Subject currentUser = SecurityUtils.getSubject();
+			UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
+			try {
+				currentUser.login(token);
+				redirect("/");
+			} catch (Exception e) {
+				// 登录失败
+				String esn = e.getClass().getSimpleName();
+				if ("IncorrectCredentialsException".equalsIgnoreCase(esn)) {
+					setAttr("errorMsg", "用户名或者密码不正确！");
+				} else if ("UnknownAccountException".equalsIgnoreCase(esn)) {
+					setAttr("errorMsg", "用户名不存在！");
+				} else {
+					setAttr("errorMsg", "未知错误！");
+				}
+				forwardAction("/security/login");
+			}
 		}
+
 	}
 
 	// 登出Action
