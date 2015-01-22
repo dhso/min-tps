@@ -1,300 +1,49 @@
-DROP TABLE IF EXISTS sys_user;
-CREATE TABLE sys_user (
-  id            BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  username      VARCHAR(50)  NOT NULL COMMENT '登录名',
-  providername  VARCHAR(50)  NOT NULL COMMENT '提供者',
-  email         VARCHAR(200) COMMENT '邮箱',
-  mobile        VARCHAR(50) COMMENT '联系电话',
-  password      VARCHAR(200) NOT NULL COMMENT '密码',
-  hasher        VARCHAR(200) NOT NULL COMMENT '加密类型',
-  salt          VARCHAR(200) NOT NULL COMMENT '加密盐',
-  avatar_url    VARCHAR(255) COMMENT '头像',
-  first_name    VARCHAR(10) COMMENT '名字',
-  last_name     VARCHAR(10) COMMENT '姓氏',
-  full_name     VARCHAR(20) COMMENT '全名',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP   NOT NULL,
-  updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
-  deleted_at TIMESTAMP NULL
-) ENGINE =InnoDB DEFAULT CHARSET =utf8 COMMENT ='用户';
+-- ----------------------------
+--  Table structure for `users`
+-- ----------------------------
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `salt` varchar(255) DEFAULT NULL,
+  `locked` bool default false,
+  CONSTRAINT `pk_users` PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `idx_users_username` on `users`(`username`);
 
-DROP TABLE IF EXISTS sys_user_info;
-CREATE TABLE sys_user_info (
-  id          BIGINT    NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  user_id     BIGINT    NOT NULL COMMENT '用户id',
-  creator_id  BIGINT COMMENT '创建者id',
-  gender      INT DEFAULT 0 COMMENT '性别0男，1女',
-  province_id BIGINT COMMENT '省id',
-  city_id     BIGINT COMMENT '市id',
-  county_id   BIGINT COMMENT '县id',
-  street      VARCHAR(500) COMMENT '街道',
-  zip_code    VARCHAR(50) COMMENT '邮编',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP   NOT NULL,
-  updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
-  deleted_at TIMESTAMP NULL
-) ENGINE =InnoDB DEFAULT CHARSET =utf8 COMMENT ='用户信息';
-
-DROP TABLE IF EXISTS sys_role;
-CREATE TABLE sys_role (
-  id         BIGINT    NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  name       VARCHAR(50)   NOT NULL COMMENT '名称',
-  value      VARCHAR(50)  NOT NULL COMMENT '值',
-  intro      VARCHAR(255) COMMENT '简介',
-  pid        BIGINT DEFAULT 0 COMMENT '父级id',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP   NOT NULL,
-  updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
-  deleted_at TIMESTAMP NULL
-) ENGINE =InnoDB DEFAULT CHARSET =utf8 COMMENT ='角色';
-
-DROP TABLE IF EXISTS sys_user_role;
-CREATE TABLE sys_user_role (
-  id      BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  user_id BIGINT NOT NULL,
-  role_id BIGINT NOT NULL
-) ENGINE =InnoDB DEFAULT CHARSET =utf8 COMMENT ='用户角色';
-
-DROP TABLE IF EXISTS sys_permission;
-CREATE TABLE sys_permission (
-  id         BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  name       VARCHAR(50) NOT NULL COMMENT '名称',
-  value      VARCHAR(50) NOT NULL COMMENT '值',
-  url        VARCHAR(255) COMMENT 'url地址',
-  intro      VARCHAR(255) COMMENT '简介',
-  pid        BIGINT DEFAULT 0 COMMENT '父级id',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP   NOT NULL,
-  updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
-  deleted_at TIMESTAMP NULL
-) ENGINE =InnoDB DEFAULT CHARSET =utf8 COMMENT ='权限';
-
-
-DROP TABLE IF EXISTS sys_role_permission;
-CREATE TABLE sys_role_permission (
-  id            BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  role_id       BIGINT NOT NULL,
-  permission_id BIGINT NOT NULL
-) ENGINE =InnoDB DEFAULT CHARSET =utf8 COMMENT ='角色权限';
-
-
--- create role--
-
-INSERT INTO sys_role(id,name, value, intro, pid,created_at)
-VALUES (1,'超级管理员','R_ADMIN','',0, current_timestamp),
-       (2,'系统管理员','R_MANAGER','',1,current_timestamp),
-       (3,'总部','R_MEMBER','',2,current_timestamp),
-       (4,'分部','R_USER','',2,current_timestamp);
-
--- create permission--
-INSERT INTO sys_permission(id, name, value, url, intro,pid, created_at)
-VALUES (1,'管理员目录','P_D_ADMIN','/admin/**','',0,current_timestamp),
-       (2,'角色权限管理','P_ROLE','/admin/role/**','',1,current_timestamp),
-       (3,'用户管理','P_USER','/admin/user/**','',1,current_timestamp),
-       (4,'总部目录','P_D_MEMBER','/member/**','',0,current_timestamp),
-       (5,'分部目录','P_D_USER','/user/**','',0,current_timestamp),
-       (6,'用户处理','P_USER_CONTROL','/user/branch**','',5,current_timestamp),
-       (7,'订单','P_ORDER','/order/**','',0,current_timestamp),
-       (8,'订单处理','P_ORDER_CONTROL','/order/deliver**','',7,current_timestamp),
-       (9,'订单更新','P_ORDER_UPDATE','/order/update**','',7,current_timestamp),
-       (10,'支部订单','P_ORDER_BRANCH','/order/branch**','',7,current_timestamp),
-       (11,'区域支行处理','P_REGION_CONTROL','/order/region**','',7,current_timestamp),
-       (12,'收货地址','P_Address','/address/**','',0,current_timestamp);
-
-INSERT INTO sys_role_permission(id,role_id, permission_id)
-VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,4),(5,1,5),(6,1,6),(7,1,7),(8,1,8),(9,1,9),(10,1,10),(11,1,11),(12,1,12),
-       (13,2,1),(14,2,3),(15,2,4),(16,2,5),(17,2,6),(18,2,7),(19,2,8),(20,2,9),(21,2,10),(22,2,11),(23,2,12),
-       (24,3,4),(25,3,5),(26,3,6),(27,3,11),
-       (28,4,5),(29,4,7),(30,4,9),(31,4,12);
-
--- user data--
--- create  admin--
-INSERT INTO sys_user(id,username, providername, email, mobile, password, hasher, salt, avatar_url, first_name, last_name, full_name, created_at)
-VALUES (1,'admin','hadong','dhso@163.com','15262731827','$shiro1$SHA-256$500000$iLqsOFPx5bjMGlB0JiNjQQ==$1cPTj9gyPGmYcKGQ8aw3shybrNF1ixdMCm/akFkn71o=','default_hasher','','','管理员','董昊','董昊.管理员',current_timestamp);
-
--- create user_info--
-INSERT INTO sys_user_info(id,user_id, creator_id, gender,province_id,city_id,county_id,street,created_at)
-VALUES (1,1,0,0,1,2,3,'人民大学',current_timestamp);
-
--- create user_role--
-INSERT INTO sys_user_role(id, user_id, role_id)
-VALUES (1,1,1);
-
-
-
-
-----------------------------------old mysql-------------
-DROP TABLE IF EXISTS sys_user;
-CREATE TABLE sys_user (
-  id            BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  username      VARCHAR(50)  NOT NULL COMMENT '登录名',
-  providername  VARCHAR(50)  NOT NULL COMMENT '提供者',
-  email         VARCHAR(200) COMMENT '邮箱',
-  mobile        VARCHAR(50) COMMENT '联系电话',
-  password      VARCHAR(200) NOT NULL COMMENT '密码',
-  hasher        VARCHAR(200) NOT NULL COMMENT '加密类型',
-  salt          VARCHAR(200) NOT NULL COMMENT '加密盐',
-  avatar_url    VARCHAR(255) COMMENT '头像',
-  first_name    VARCHAR(10) COMMENT '名字',
-  last_name     VARCHAR(10) COMMENT '姓氏',
-  full_name     VARCHAR(20) COMMENT '全名',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP   NOT NULL,
-  updated_at TIMESTAMP NULL ,
-  deleted_at TIMESTAMP NULL
-) ENGINE =InnoDB DEFAULT CHARSET =utf8 COMMENT ='用户';
-DROP TRIGGER IF EXISTS `update_sys_user_trigger`;
-DELIMITER 
-CREATE TRIGGER `update_sys_user_trigger` BEFORE UPDATE ON `sys_user` FOR EACH ROW SET NEW.`updated_at` = NOW()
-DELIMITER ;
-
-
-DROP TABLE IF EXISTS sys_user_info;
-CREATE TABLE sys_user_info (
-  id          BIGINT    NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  user_id     BIGINT    NOT NULL COMMENT '用户id',
-  creator_id  BIGINT COMMENT '创建者id',
-  gender      INT DEFAULT 0 COMMENT '性别0男，1女',
-  province_id BIGINT COMMENT '省id',
-  city_id     BIGINT COMMENT '市id',
-  county_id   BIGINT COMMENT '县id',
-  street      VARCHAR(500) COMMENT '街道',
-  zip_code    VARCHAR(50) COMMENT '邮编',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP   NOT NULL,
-  updated_at TIMESTAMP NULL,
-  deleted_at TIMESTAMP NULL
-) ENGINE =InnoDB DEFAULT CHARSET =utf8 COMMENT ='用户信息';
-DROP TRIGGER IF EXISTS `update_sys_user_info_trigger`;
-DELIMITER 
-CREATE TRIGGER `update_sys_user_info_trigger` BEFORE UPDATE ON `sys_user_info` FOR EACH ROW SET NEW.`updated_at` = NOW()
-DELIMITER ;
-
-DROP TABLE IF EXISTS sys_role;
-CREATE TABLE sys_role (
-  id         BIGINT    NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  name       VARCHAR(50)   NOT NULL COMMENT '名称',
-  value      VARCHAR(50)  NOT NULL COMMENT '值',
-  intro      VARCHAR(255) COMMENT '简介',
-  pid        BIGINT DEFAULT 0 COMMENT '父级id',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP   NOT NULL,
-  updated_at TIMESTAMP NULL,
-  deleted_at TIMESTAMP NULL
-) ENGINE =InnoDB DEFAULT CHARSET =utf8 COMMENT ='角色';
-DROP TRIGGER IF EXISTS `update_sys_role_trigger`;
-DELIMITER 
-CREATE TRIGGER `update_sys_role_trigger` BEFORE UPDATE ON `sys_role` FOR EACH ROW SET NEW.`updated_at` = NOW()
-DELIMITER ;
-
-DROP TABLE IF EXISTS sys_user_role;
-CREATE TABLE sys_user_role (
-  id      BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  user_id BIGINT NOT NULL,
-  role_id BIGINT NOT NULL
-) ENGINE =InnoDB DEFAULT CHARSET =utf8 COMMENT ='用户角色';
-
-DROP TABLE IF EXISTS sys_permission;
-CREATE TABLE sys_permission (
-  id         BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  name       VARCHAR(50) NOT NULL COMMENT '名称',
-  value      VARCHAR(50) NOT NULL COMMENT '值',
-  url        VARCHAR(255) COMMENT 'url地址',
-  intro      VARCHAR(255) COMMENT '简介',
-  pid        BIGINT DEFAULT 0 COMMENT '父级id',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP   NOT NULL,
-  updated_at TIMESTAMP NULL,
-  deleted_at TIMESTAMP NULL
-) ENGINE =InnoDB DEFAULT CHARSET =utf8 COMMENT ='权限';
-DROP TRIGGER IF EXISTS `update_sys_permission_trigger`;
-DELIMITER 
-CREATE TRIGGER `update_sys_permission_trigger` BEFORE UPDATE ON `sys_permission` FOR EACH ROW SET NEW.`updated_at` = NOW()
-DELIMITER ;
-
-DROP TABLE IF EXISTS sys_role_permission;
-CREATE TABLE sys_role_permission (
-  id            BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  role_id       BIGINT NOT NULL,
-  permission_id BIGINT NOT NULL
-) ENGINE =InnoDB DEFAULT CHARSET =utf8 COMMENT ='角色权限';
-
-
--- create role--
-
-INSERT INTO sys_role(id,name, value, intro, pid,created_at)
-VALUES (1,'超级管理员','R_ADMIN','',0, current_timestamp),
-       (2,'系统管理员','R_MANAGER','',1,current_timestamp),
-       (3,'总部','R_MEMBER','',2,current_timestamp),
-       (4,'分部','R_USER','',2,current_timestamp);
-
--- create permission--
-INSERT INTO sys_permission(id, name, value, url, intro,pid, created_at)
-VALUES (1,'管理员目录','P_D_ADMIN','/admin/**','',0,current_timestamp),
-       (2,'角色权限管理','P_ROLE','/admin/role/**','',1,current_timestamp),
-       (3,'用户管理','P_USER','/admin/user/**','',1,current_timestamp),
-       (4,'总部目录','P_D_MEMBER','/member/**','',0,current_timestamp),
-       (5,'分部目录','P_D_USER','/user/**','',0,current_timestamp),
-       (6,'用户处理','P_USER_CONTROL','/user/branch**','',5,current_timestamp),
-       (7,'订单','P_ORDER','/order/**','',0,current_timestamp),
-       (8,'订单处理','P_ORDER_CONTROL','/order/deliver**','',7,current_timestamp),
-       (9,'订单更新','P_ORDER_UPDATE','/order/update**','',7,current_timestamp),
-       (10,'支部订单','P_ORDER_BRANCH','/order/branch**','',7,current_timestamp),
-       (11,'区域支行处理','P_REGION_CONTROL','/order/region**','',7,current_timestamp),
-       (12,'收货地址','P_Address','/address/**','',0,current_timestamp);
-
-INSERT INTO sys_role_permission(id,role_id, permission_id)
-VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,4),(5,1,5),(6,1,6),(7,1,7),(8,1,8),(9,1,9),(10,1,10),(11,1,11),(12,1,12),
-       (13,2,1),(14,2,3),(15,2,4),(16,2,5),(17,2,6),(18,2,7),(19,2,8),(20,2,9),(21,2,10),(22,2,11),(23,2,12),
-       (24,3,4),(25,3,5),(26,3,6),(27,3,11),
-       (28,4,5),(29,4,7),(30,4,9),(31,4,12);
-
--- user data--
--- create  admin--
-INSERT INTO sys_user(id,username, providername, email, mobile, password, hasher, salt, avatar_url, first_name, last_name, full_name, created_at)
-VALUES (1,'admin','hadong','dhso@163.com','15262731827','$shiro1$SHA-256$500000$iLqsOFPx5bjMGlB0JiNjQQ==$1cPTj9gyPGmYcKGQ8aw3shybrNF1ixdMCm/akFkn71o=','default_hasher','','','管理员','董昊','董昊.管理员',current_timestamp);
-
--- create user_info--
-INSERT INTO sys_user_info(id,user_id, creator_id, gender,province_id,city_id,county_id,street,created_at)
-VALUES (1,1,0,0,1,2,3,'人民大学',current_timestamp);
-
--- create user_role--
-INSERT INTO sys_user_role(id, user_id, role_id)
-VALUES (1,1,1);
-
-
-
-
-
------v3-------------
-/*
- Navicat Premium Data Transfer
-
- Source Server         : mysql
- Source Server Type    : MySQL
- Source Server Version : 50614
- Source Host           : localhost
- Source Database       : jfinal_shiro
-
- Target Server Type    : MySQL
- Target Server Version : 50614
- File Encoding         : utf-8
-
- Date: 02/26/2014 23:41:40 PM
-*/
-
-SET NAMES utf8;
-SET FOREIGN_KEY_CHECKS = 0;
+-- ----------------------------
+--  Records of `users`
+-- ----------------------------
+BEGIN;
+INSERT INTO `users` VALUES 
+('1', 'admin', 'admin', null, false), 
+('2', 'adminuser', 'adminuser', null, false), 
+('3', 'user', 'user', null, false);
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `permissions`
 -- ----------------------------
 DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE `permissions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `permission` varchar(45) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `permission` varchar(100) NOT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `available` bool default false,
+  CONSTRAINT `pk_permissions` PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+create unique index `idx_permissions_permission` on `permissions`(`permission`);
 
 -- ----------------------------
 --  Records of `permissions`
 -- ----------------------------
 BEGIN;
-INSERT INTO `permissions` VALUES ('1', 'editUser', null, '2014-02-26 17:50:14'), ('2', 'showUser', null, '2014-02-26 17:50:26'), ('3', 'addUser', null, '2014-02-26 17:50:37'), ('4', 'deleteUser', null, '2014-02-26 17:51:11');
+INSERT INTO `permissions` VALUES 
+('1', 'editUser', null, true), 
+('2', 'showUser', null, true), 
+('3', 'addUser', null, true), 
+('4', 'deleteUser', null, true);
 COMMIT;
 
 -- ----------------------------
@@ -302,17 +51,20 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `role_name` varchar(45) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `role` varchar(100) NOT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `available` bool default false,
+  CONSTRAINT `pk_roles` primary key(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+create unique index `idx_roles_role` on `roles`(`role`);
 -- ----------------------------
 --  Records of `roles`
 -- ----------------------------
 BEGIN;
-INSERT INTO `roles` VALUES ('1', 'admin', 'admin user'), ('2', 'user', 'user');
+INSERT INTO `roles` VALUES 
+('1', 'admin', 'admin user', true), 
+('2', 'user', 'user', true);
 COMMIT;
 
 -- ----------------------------
@@ -320,20 +72,18 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `roles_permissions`;
 CREATE TABLE `roles_permissions` (
-  `role_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`role_id`,`permission_id`),
-  KEY `rolse_permissions_permissions_id_fk_idx` (`permission_id`),
-  CONSTRAINT `rolse_permissions_roles_id_fk` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `rolse_permissions_permissions_id_fk` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `role_id` bigint NOT NULL,
+  `permission_id` bigint NOT NULL,
+  CONSTRAINT pk_roles_permissions PRIMARY KEY (`role_id`,`permission_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `roles_permissions`
 -- ----------------------------
 BEGIN;
-INSERT INTO `roles_permissions` VALUES ('1', '1', '2014-02-26 17:52:23'), ('1', '2', '2014-02-26 17:52:30'), ('1', '3', '2014-02-26 17:52:38'), ('1', '4', '2014-02-26 17:52:44'), ('2', '2', '2014-02-26 17:52:51');
+INSERT INTO `roles_permissions` VALUES 
+('1', '1'), ('1', '2'), ('1', '3'), 
+('1', '4'), ('2', '2');
 COMMIT;
 
 -- ----------------------------
@@ -341,40 +91,20 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `user_roles`;
 CREATE TABLE `user_roles` (
-  `user_id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL,
-  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`user_id`,`role_id`),
-  KEY `user_roles_roles_id_fk_idx` (`role_id`),
-  CONSTRAINT `user_roles_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `user_roles_roles_id_fk` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `user_id` bigint NOT NULL,
+  `role_id` bigint NOT NULL,
+  CONSTRAINT pk_users_roles PRIMARY KEY (`user_id`,`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `user_roles`
 -- ----------------------------
 BEGIN;
-INSERT INTO `user_roles` VALUES ('1', '1', '2014-02-26 17:51:56'), ('1', '2', '2014-02-26 20:46:55'), ('2', '2', '2014-02-26 17:52:00'), ('3', '1', '2014-02-26 23:34:06');
+INSERT INTO `user_roles` VALUES 
+('1', '1'), 
+('1', '2'), 
+('2', '2'), 
+('3', '1');
 COMMIT;
 
--- ----------------------------
---  Table structure for `users`
--- ----------------------------
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0未激活   1激活   2注销',
-  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`,`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
--- ----------------------------
---  Records of `users`
--- ----------------------------
-BEGIN;
-INSERT INTO `users` VALUES ('1', 'xiaoming', 'xiaoming', '1', '2014-02-26 17:44:21'), ('2', 'xiaohong', 'xiaohong', '1', '2014-02-26 17:44:45'), ('3', 'xiaohuang', 'xiaohuang', '1', '2014-02-26 23:31:20');
-COMMIT;
-
-SET FOREIGN_KEY_CHECKS = 1;
