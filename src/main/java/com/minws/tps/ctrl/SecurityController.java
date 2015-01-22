@@ -14,21 +14,21 @@ import com.jfinal.ext.route.ControllerBind;
 @ControllerBind(controllerKey = "/security", viewPath = "/security")
 public class SecurityController extends Controller {
 
-	//默认登录页面
-    public void index() {
-        render("login.ftl");
-    }
+	// 默认登录页面
+	public void index() {
+		render("login.ftl");
+	}
 
-    //登录页面
-    public void login() {
-    	render("login.ftl");
-    }
+	// 登录页面
+	public void login() {
+		render("login.ftl");
+	}
 
-    //登录Action
-    public void signin() {
+	// 登录Action
+	public void signin() {
 		String username = getPara("username");
 		String password = getPara("password");
-		Boolean rememberMe = "on".equalsIgnoreCase(getPara("rememberMe","off"));
+		Boolean rememberMe = "on".equalsIgnoreCase(getPara("rememberMe", "off"));
 		Subject currentUser = SecurityUtils.getSubject();
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
 		try {
@@ -37,14 +37,18 @@ public class SecurityController extends Controller {
 		} catch (Exception e) {
 			// 登录失败
 			String esn = e.getClass().getSimpleName();
-			if("IncorrectCredentialsException".equalsIgnoreCase(esn)){
+			if ("IncorrectCredentialsException".equalsIgnoreCase(esn)) {
 				setAttr("errorMsg", "用户名或者密码不正确！");
+			} else if ("UnknownAccountException".equalsIgnoreCase(esn)) {
+				setAttr("errorMsg", "用户名不存在！");
+			} else {
+				setAttr("errorMsg", "未知错误！");
 			}
 			forwardAction("/security/login");
 		}
 	}
 
-    //登出Action
+	// 登出Action
 	public void signout() {
 		Subject currentUser = SecurityUtils.getSubject();
 		if (currentUser.isAuthenticated()) {
@@ -64,12 +68,12 @@ public class SecurityController extends Controller {
 		setAttr("success", false);
 		renderJson();
 	}
-	
-    public void err404() {
-        render("error/404.ftl");
-    }
 
-    public void err500() {
-        render("error/500.ftl");
-    }
+	public void err404() {
+		render("error/404.ftl");
+	}
+
+	public void err500() {
+		render("error/500.ftl");
+	}
 }
