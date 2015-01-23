@@ -44,9 +44,17 @@ public class SecurityController extends Controller {
 					setAttr("errorMsg", "用户名或者密码不正确！");
 				} else if ("UnknownAccountException".equalsIgnoreCase(esn)) {
 					setAttr("errorMsg", "用户名不存在！");
+				} else if ("LockedAccountException".equalsIgnoreCase(esn)) {
+					setAttr("errorMsg", "用户已锁定！");
+				} else if ("AuthenticationException".equalsIgnoreCase(esn)) {
+					setAttr("errorMsg", "用户名或者密码不正确！");
+				} else if ("ExcessiveAttemptsException".equalsIgnoreCase(esn)) {
+					setAttr("errorMsg", "密码5次错误，10分钟内禁止登录！");
 				} else {
 					setAttr("errorMsg", "未知错误！");
 				}
+				setAttr("username", username);
+				setAttr("rememberMe", rememberMe);
 				forwardAction("/security/login");
 			}
 		}

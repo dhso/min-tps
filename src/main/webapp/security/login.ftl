@@ -28,14 +28,14 @@
             <table cellpadding="5">
             	<#if errorMsg??>
                 <tr>
-                	<td colspan=2>
-	                	<span class="error">${errorMsg}</span>
+                	<td colspan=2 class="error">
+	                	<span>${errorMsg}</span>
 					</td>
                 </tr>
                 </#if>
                 <tr>
                     <td>用户:</td>
-                    <td><input class="easyui-textbox" type="text" name="username" id="username" data-options="required:true,missingMessage:'请输入用户名/手机号'"></input></td>
+                    <td><input class="easyui-textbox" type="text" name="username" id="username" data-options="required:true,missingMessage:'请输入用户名/手机号'" value="<#if username??>${username}</#if>"></input></td>
                 </tr>
                 <tr>
                     <td>密码:</td>
@@ -43,7 +43,7 @@
                 </tr>
                 <tr>
                 	<td colspan=2>
-                		<input type="checkbox" name="rememberMe" id="rememberMe" checked="checked" /><label for="rememberMe">记住我</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                		<input type="checkbox" name="rememberMe" id="rememberMe" <#if rememberMe??&&rememberMe>checked</#if> /><label for="rememberMe">记住我</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 		<button type="submit" class="easyui-linkbutton">登录</button>
 						<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">重置</a>
 					</td>
