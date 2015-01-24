@@ -11,6 +11,7 @@ import com.jfinal.core.JFinal;
 import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.ext.handler.UrlSkipHandler;
 import com.jfinal.ext.interceptor.SessionInViewInterceptor;
+import com.jfinal.ext.plugin.config.ConfigPlugin;
 import com.jfinal.ext.plugin.shiro.ShiroInterceptor;
 import com.jfinal.ext.plugin.shiro.ShiroPlugin;
 import com.jfinal.ext.plugin.sqlinxml.SqlInXmlPlugin;
@@ -20,10 +21,12 @@ import com.jfinal.ext.route.AutoBindRoutes;
 import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
+import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.IErrorRenderFactory;
 import com.jfinal.render.RedirectRender;
 import com.jfinal.render.Render;
 import com.jfinal.render.ViewType;
+import com.minws.frame.plugin.shiro.FreemarketShiroTags;
 
 /**
  * API引导式配置
@@ -84,6 +87,7 @@ public class AppConfig extends JFinalConfig {
 		me.add(autoTableBindPlugin);
 		if (getPropertyToBoolean("tps.devMode", false))
 			me.add(new SqlInXmlPlugin());
+		me.add(new ConfigPlugin().addResource("config.txt"));
 	}
 
 	/**
@@ -125,6 +129,7 @@ public class AppConfig extends JFinalConfig {
 	@Override
 	public void afterJFinalStart() {
 		super.afterJFinalStart();
+		FreeMarkerRender.getConfiguration().setSharedVariable("shiro", new FreemarketShiroTags());
 		// HttpUtils.setProxy(ProsMap.getStrPro("tps.local.proxy.http.host"),
 		// ProsMap.getStrPro("tps.local.proxy.http.port"),
 		// ProsMap.getStrPro("tps.local.proxy.auth.username"),

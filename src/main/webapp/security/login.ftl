@@ -55,6 +55,14 @@
     <script type="text/javascript" src="${baseUrl}/static/easyui/jquery.min.js"></script>
 	<script type="text/javascript" src="${baseUrl}/static/easyui/jquery.easyui.min.js"></script>
     <script>
+	    $(document).ready(function() {
+			if(!$("#username").val()){
+				$("#username").parent().find("input.textbox-text").focus();
+			}else{
+				$("#password").parent().find("input.textbox-text").focus();
+			}
+		});
+	    
         function clearForm(){
             $('#login_form').form('clear');
         }

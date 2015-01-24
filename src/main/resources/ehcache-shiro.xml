@@ -28,6 +28,7 @@
            timeToLiveSeconds="0"
            timeToIdleSeconds="0"
            diskPersistent="true"
-           diskExpiryThreadIntervalSeconds="600"/>
-
+           diskExpiryThreadIntervalSeconds="600">
+     </cache>
+           
 </ehcache>

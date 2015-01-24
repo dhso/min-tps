@@ -23,7 +23,6 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
 
 	public RetryLimitHashedCredentialsMatcher() {
 		CacheManager cacheManager = CacheManager.newInstance(RetryLimitHashedCredentialsMatcher.class.getClassLoader().getResource("ehcache-shiro-retry.xml"));
-		//CacheManager cacheManager = CacheManager.getCacheManager("shiro");
 		passwordRetryCache = cacheManager.getCache("passwordRetryCache");
 	}
 

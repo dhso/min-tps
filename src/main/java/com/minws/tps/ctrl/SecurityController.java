@@ -4,8 +4,10 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 
+import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.ext.route.ControllerBind;
+import com.minws.tps.validator.SigninValidator;
 
 /**
  * Created by unlimited on 2014/4/9.
@@ -25,6 +27,7 @@ public class SecurityController extends Controller {
 	}
 
 	// 登录Action
+	@Before(SigninValidator.class)
 	public void signin() {
 		if ("GET".equalsIgnoreCase(this.getRequest().getMethod().toUpperCase())) {
 			forwardAction("/security/login");
@@ -43,13 +46,17 @@ public class SecurityController extends Controller {
 				if ("IncorrectCredentialsException".equalsIgnoreCase(esn)) {
 					setAttr("errorMsg", "用户名或者密码不正确！");
 				} else if ("UnknownAccountException".equalsIgnoreCase(esn)) {
-					setAttr("errorMsg", "用户名不存在！");
+					setAttr("errorMsg", "用户名错误！");
 				} else if ("LockedAccountException".equalsIgnoreCase(esn)) {
 					setAttr("errorMsg", "用户已锁定！");
 				} else if ("AuthenticationException".equalsIgnoreCase(esn)) {
-					setAttr("errorMsg", "用户名或者密码不正确！");
+					setAttr("errorMsg", "用户认证失败！");
 				} else if ("ExcessiveAttemptsException".equalsIgnoreCase(esn)) {
-					setAttr("errorMsg", "密码5次错误，10分钟内禁止登录！");
+					setAttr("errorMsg", "用户登录错误次数过多，10分钟内禁止登录！");
+				} else if ("DisabledAccountException".equalsIgnoreCase(esn)) {
+					setAttr("errorMsg", "用户已禁用！");
+				} else if ("ExpiredCredentialsException".equalsIgnoreCase(esn)) {
+					setAttr("errorMsg", "用户已过期！");
 				} else {
 					setAttr("errorMsg", "未知错误！");
 				}
