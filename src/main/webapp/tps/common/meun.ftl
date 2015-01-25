@@ -18,7 +18,7 @@
 		<p><a href="#" class="easyui-linkbutton" data-options="plain:true">新闻管理</a></p>
 	</div>
 	<div title="后台管理" style="padding: 10px;">
-		content2</div>
+		content</div>
 	<div title="设置" style="padding: 10px">
 		<a>安全设置</a>
 	</div>
