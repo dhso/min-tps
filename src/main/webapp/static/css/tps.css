@@ -16,6 +16,16 @@ body {
 		"WenQuanYi Micro Hei", sans-serif;
 }
 
+.f-right{
+	float:right;
+}
+
+.logo{
+	background-image: url("../img/logo.png");
+}
+.top-right{
+	padding: 20px 10px 5px 0;
+}
 .m-content, .m-foot, .navigation-bar-content {
 	width: 998px;
 	margin: 0 auto;

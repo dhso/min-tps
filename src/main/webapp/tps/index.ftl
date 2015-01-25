@@ -4,32 +4,27 @@
 <head><#include "common/head.ftl" encoding="UTF-8">
 </head>
 <body>
-	<div class="easyui-layout"  data-options="fit:true">
-        <div data-options="region:'north'" style="height:10%">
-        亲爱的
-        	<@shiro.hasRole name="admin">
-		管理员
-		</@shiro.hasRole><@shiro.principal/>你好，
-			<@shiro.authenticated>
-		  		<li><a href="${baseUrl}/security/signout">退出</a></li>
-			</@shiro.authenticated></div>
-        <div data-options="region:'south',split:true" style="height:50px;"></div>
-        <div data-options="region:'east',split:true" title="East" style="width:180px;">
-            <ul class="easyui-tree" data-options="url:'tree_data1.json',method:'get',animate:true,dnd:true"></ul>
+	<div class="easyui-layout"  data-options="fit:true,border:true">
+        <div data-options="region:'north'" style="height:80px;">
+        	<div class="logo"></div>
+        	<div class="f-right top-right">
+        		<span>主题：</span><select id="cb-theme" style="width:120px"></select>
+        		<p class="blank-split"></p>
+        		<span>亲爱的 <@shiro.principal/> (<@shiro.hasRole name="admin">管理员</@shiro.hasRole>) 你好!</span>
+	        	<@shiro.authenticated>
+			  		&nbsp;<a href="${baseUrl}/security/signout">退出</a>
+				</@shiro.authenticated>
+        	</div>
+			
+		</div>
+        
+        <div data-options="region:'west',split:false" title="菜单" style="width:100px;">
+            <#include "common/meun.ftl" encoding="UTF-8">
         </div>
-        <div data-options="region:'west',split:true" title="West" style="width:100px;">
-            <div class="easyui-accordion" data-options="fit:true,border:false">
-                <div title="Title1" style="padding:10px;">
-                    content1
-                </div>
-                <div title="Title2" data-options="selected:true" style="padding:10px;">
-                    content2
-                </div>
-                <div title="Title3" style="padding:10px">
-                    content3
-                </div>
-            </div>
+        <div data-options="region:'east',split:false" title="我的信息" style="width:202px;">
+            <div class="easyui-calendar" id="myCalendar"></div>
         </div>
+        <div data-options="region:'south',split:false" style="height:50px;"></div>
         <div data-options="region:'center',title:'Main Title',iconCls:'icon-ok'">
             <div class="easyui-tabs" data-options="fit:true,border:false,plain:true">
                 <div title="About" data-options="href:'_content.html'" style="padding:10px"></div>
