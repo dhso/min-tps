@@ -40,6 +40,14 @@ $(document).ready(function() {
 		weeks:['日','一','二','三','四','五','六'],
 		months:['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
 	});
+
+	$('#mainTabContain').tabs({
+		onLoad: function(panel){
+			if(panel.context.innerHTML.indexOf('rel="prettyPhoto')>0){
+				prettyPhotoInit();
+			}
+		}
+	});
 });
 
 //更换主题
@@ -84,4 +92,8 @@ function removeTabPanel(contain){
         var index = $(contain).tabs('getTabIndex', tab);
         $(contain).tabs('close', index);
     }
+}
+//prettyPhoto初始化
+function prettyPhotoInit(){
+	$("a[rel^='prettyPhoto']").prettyPhoto();
 }

@@ -37,6 +37,15 @@ body {
 	width: 300px!important;
 	margin: 10px!important;
 }
+/* 文章列表 articleList */
+.articleList{
+	margin:10px!important;
+}
+/* 图片列表 pictureList */
+.pictureList li{
+	width: 262px!important;
+	margin:10px!important;
+}
 .m-content, .m-foot, .navigation-bar-content {
 	width: 998px;
 	margin: 0 auto;

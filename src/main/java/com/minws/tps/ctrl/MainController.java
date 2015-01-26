@@ -17,4 +17,18 @@ public class MainController extends Controller {
 	public void packages() {
 		render("pages/packages.htm");
 	}
+	
+	public void articleList() {
+		String category = getPara("category", "");
+		String pageNum = getPara("pageNum", "1");
+		String everyNum = getPara("everyNum", "10");
+		render("pages/articleList.htm");
+	}
+	
+	public void pictureList() {
+		String category = getPara("category", "");
+		String pageNum = getPara("pageNum", "1");
+		String everyNum = getPara("everyNum", "10");
+		render("pages/pictureList.htm");
+	}
 }
