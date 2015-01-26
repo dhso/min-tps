@@ -21,7 +21,7 @@ $(document).ready(function() {
 	        text: 'Black'
 	    }
 	];
-	$('#cb-theme').combobox({
+	$('#chooseTheme').combobox({
 	    data: themes,
 	    editable: false,
 	    panelHeight: 'auto',
@@ -44,10 +44,9 @@ $(document).ready(function() {
 
 //更换主题
 function onChangeTheme(theme) {
-    var link = $('head').find('link:first');
+    var link = $('head').find('link[css="easyui"]');
     link.attr('href', 'static/easyui/themes/' + theme + '/easyui.css');
 }
-
 //我的日历
 var d1 = Math.floor((Math.random()*30)+1);
 var d2 = Math.floor((Math.random()*30)+1);
@@ -61,4 +60,28 @@ function formatDay(date){
         return '<div class="icon-search md">' + d + '</div>';
     }
     return d;
+}
+//添加tabPanel
+function addTabPanel(contain,title,href,reload){
+	var existTabPanel = $(contain).tabs('exists',title);
+	if(existTabPanel){
+		$(contain).tabs('select',title);
+		if(reload){
+			$(contain).tabs('getSelected').panel('refresh', href);
+		}
+	}else{
+		$(contain).tabs('add',{
+	        title: title,
+	        href: href,
+	        closable: true
+	    });
+	}
+}
+//删除tabPanel
+function removeTabPanel(contain){
+    var tab = $(contain).tabs('getSelected');
+    if (tab){
+        var index = $(contain).tabs('getTabIndex', tab);
+        $(contain).tabs('close', index);
+    }
 }

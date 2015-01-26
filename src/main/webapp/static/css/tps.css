@@ -5,7 +5,6 @@
 	margin: 0px;
 	outline: none;
 }
-
 body {
 	background-repeat: no-repeat;
 	background-position: top center;
@@ -15,16 +14,28 @@ body {
 		"Hiragino Sans GB W3", "Microsoft YaHei UI", "Microsoft YaHei",
 		"WenQuanYi Micro Hei", sans-serif;
 }
-
 .f-right{
 	float:right;
 }
-
-.logo{
-	background-image: url("../img/logo.png");
+.t-right{
+	text-align: right;
 }
-.top-right{
-	padding: 20px 10px 5px 0;
+/* 布局-顶部 */
+.layer-top div{
+	height: 60px;
+	margin: 10px 0 5px 0;
+}
+.layer-top div.logo{
+	margin-left: 30px;
+	background-image: url("../img/logo.png");
+	background-repeat: no-repeat ;
+	background-size: contain;
+}
+
+/* 套餐packages */
+.packages li{
+	width: 300px!important;
+	margin: 10px!important;
 }
 .m-content, .m-foot, .navigation-bar-content {
 	width: 998px;

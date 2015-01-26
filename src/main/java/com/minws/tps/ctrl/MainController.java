@@ -1,16 +1,20 @@
 package com.minws.tps.ctrl;
 
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
-
 import com.jfinal.core.Controller;
 import com.jfinal.ext.route.ControllerBind;
 
 @ControllerBind(controllerKey = "/", viewPath = "/tps")
 public class MainController extends Controller {
 
-	@RequiresAuthentication
 	public void index() {
-		render("index.ftl");
+		render("index.htm");
+	}
+	
+	public void welcome() {
+		render("pages/welcome.htm");
 	}
 
+	public void packages() {
+		render("pages/packages.htm");
+	}
 }

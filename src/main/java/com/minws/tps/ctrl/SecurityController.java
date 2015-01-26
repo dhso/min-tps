@@ -18,12 +18,12 @@ public class SecurityController extends Controller {
 
 	// 默认登录页面
 	public void index() {
-		render("login.ftl");
+		render("login.htm");
 	}
 
 	// 登录页面
 	public void login() {
-		render("login.ftl");
+		render("login.htm");
 	}
 
 	// 登录Action
@@ -90,10 +90,10 @@ public class SecurityController extends Controller {
 	}
 
 	public void err404() {
-		render("error/404.ftl");
+		render("error/404.htm");
 	}
 
 	public void err500() {
-		render("error/500.ftl");
+		render("error/500.htm");
 	}
 }
