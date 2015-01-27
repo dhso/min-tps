@@ -5,8 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.ext.route.ControllerBind;
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.ehcache.CacheInterceptor;
+import com.jfinal.plugin.ehcache.CacheName;
+import com.minws.tps.model.Article;
 
 @ControllerBind(controllerKey = "/", viewPath = "/tps")
 public class MainController extends Controller {
@@ -23,16 +28,14 @@ public class MainController extends Controller {
 		render("pages/packages.htm");
 	}
 
+	@Before(CacheInterceptor.class)
+	@CacheName("articleList")
 	public void articleList() {
-		String category = getPara("category", "");
-		String pageNum = getPara("pageNum", "1");
-		String everyNum = getPara("everyNum", "10");
-		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("title", "第一篇文章");
-		map.put("text", "第一篇文章内容");
-		list.add(map);
-		setAttr("articleLists", list);
+		Integer categoryId = getParaToInt("categoryId", 1);
+		Integer pageNumber = getParaToInt("pageNumber", 1);
+		Integer pageSize = getParaToInt("pageSize", 10);
+		setAttr("articlePage", Article.dao.findAllArticles(categoryId, pageNumber, pageSize));
+		setAttr("categoryId", categoryId);
 		render("pages/articleList.htm");
 	}
 

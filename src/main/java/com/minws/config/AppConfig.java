@@ -14,7 +14,6 @@ import com.jfinal.ext.interceptor.SessionInViewInterceptor;
 import com.jfinal.ext.plugin.config.ConfigPlugin;
 import com.jfinal.ext.plugin.shiro.ShiroInterceptor;
 import com.jfinal.ext.plugin.shiro.ShiroPlugin;
-import com.jfinal.ext.plugin.sqlinxml.SqlInXmlPlugin;
 import com.jfinal.ext.plugin.tablebind.AutoTableBindPlugin;
 import com.jfinal.ext.plugin.tablebind.SimpleNameStyles;
 import com.jfinal.ext.route.AutoBindRoutes;
@@ -70,23 +69,22 @@ public class AppConfig extends JFinalConfig {
 	 */
 	@Override
 	public void configPlugin(Plugins me) {
+		// 添加shiro支持
 		if (getPropertyToBoolean("tps.openShiro", true))
 			me.add(new ShiroPlugin(routes));
-		me.add(new EhCachePlugin());
+		// 添加缓存支持
+		me.add(new EhCachePlugin(AppConfig.class.getClassLoader().getResource("ehcache-model.xml")));
 		// 配置数据库连接池插件
 		DruidPlugin druidPlugin = new DruidPlugin(getProperty("tps.jdbcUrl"), getProperty("tps.jdbcUser"), getProperty("tps.jdbcPassword"), getProperty("tps.jdbcDriver"));
-
 		druidPlugin.addFilter(new StatFilter());
 		me.add(druidPlugin);
-
 		// 添加自动绑定model与表插件
 		AutoTableBindPlugin autoTableBindPlugin = new AutoTableBindPlugin(druidPlugin, SimpleNameStyles.LOWER_UNDERLINE);
 		autoTableBindPlugin.setShowSql(true);
 		autoTableBindPlugin.setContainerFactory(new CaseInsensitiveContainerFactory());
 		// autoTableBindPlugin.setAutoScan(false);
 		me.add(autoTableBindPlugin);
-		if (getPropertyToBoolean("tps.devMode", false))
-			me.add(new SqlInXmlPlugin());
+
 		me.add(new ConfigPlugin().addResource("config.txt"));
 	}
 

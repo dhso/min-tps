@@ -1,4 +1,4 @@
-<#list articleLists as articleList>
+<#list articlePage.list as articleList>
 <div class="media articleList">
 	<a class="pull-left" href="#"> <img class="media-object"
 		data-src="holder.js/64x64" alt="64x64"
@@ -7,21 +7,9 @@
 	</a>
 	<div class="media-body">
 		<h4 class="media-heading">${articleList.title}</h4>
-		${articleList.text}
+		${articleList.content}
 	</div>
 </div>
 </#list>
-<!-- <div class="media articleList">
-	<a class="pull-left" href="#"> <img class="media-object"
-		data-src="holder.js/64x64" alt="64x64"
-		src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACfElEQVR4Xu2Y54piQRCFj4oRURETiAEVEyKCvv8TiAmMmBUMmDEgKO5Wg+LsMjsz9+LsoNV/BLHrdp8+db5rKxaLxQUvPBQsADuAW4Az4IUzEByCTAGmAFOAKcAUeGEFGIOMQcYgY5Ax+MIQ4D9DjEHGIGOQMcgYZAy+sAKyMTibzVCv13E4HKDVahEOh+F0Ot9IWqvVMBwOEQqF4Pf7P5T7ETXfe6gsAbbbLfL5PEwmE4LBIAqFAjQaDVKplPik8RuzKJVKOJ1OnxLgETX/pbgsAfr9PlqtFmKxGFwu11/POZ/PKBaLWC6XuFwuNwE6nQ7a7Tbsdrv4joSj3yaTSazXa0k1P7TVOz+QJUClUsF4PBbWpxbQ6XSIRqOw2WzicVeBLBYL5vP5TQByQy6Xw36/F+4hgag1yEVSa/4XAcrlMkajkTh92gCdpEqlQiaTEZan9tDr9SAByCn3GUDCVatVcfJGoxHpdBpqtRpyakoRQZYDaLGTyQTxeFyIQBsmCycSCVCQTadTYevVaoVms/lGABIom82Cet7r9YrwpCGn5rcL0Ov1xMlGIhG43e5bv9Nmut2usPif4+qCaw5QNlALkVBmsxlyan67ANfENhgMovcp8JRK5c3O1wWRGPcOuM5TKBRwOBwYDAawWq2CHrvdTjjpqzWlbJ7myGoBKkAt0Gg0cDwexaKpHajn78e9AD6f72bzQCAAj8cjsmOz2dyc9NWan3m3eMh7gFTVf9I82Q74SZuRshYWgG+E+EaIb4T4RkhKej7LHKYAU4ApwBRgCjxLokvZB1OAKcAUYAowBaSk57PMYQowBZgCTAGmwLMkupR9MAVenQK/ABFDeJ+TLM9JAAAAAElFTkSuQmCC"
-		style="width: 64px; height: 64px;">
-	</a>
-	<div class="media-body">
-		<h4 class="media-heading">Media heading</h4>
-		Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
-		scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in
-		vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
-		vulputate fringilla. Donec lacinia congue felis in faucibus.
-	</div>
-</div> -->
+<div class="paginationBarSplit"></div>
+<div class="easyui-pagination paginationBar" goto="articleList?categoryId=${categoryId}" data-options="total:${articlePage.totalRow},pageSize:${articlePage.pageSize},pageNumber:${articlePage.pageNumber},beforePageText:'页码',afterPageText:'/ {pages}',displayMsg:'{from} ~ {to} 条记录 | 共 {total} 条'"></div>

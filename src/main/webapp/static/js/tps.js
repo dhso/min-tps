@@ -1,26 +1,5 @@
+var themes = [{ value: 'default', text: 'Default' }, { value: 'gray', text: 'Gray' }, { value: 'metro', text: 'Metro' }, { value: 'bootstrap', text: 'Bootstrap' }, { value: 'black', text: 'Black'}];
 $(document).ready(function() {
-	var themes = [
-	    {
-	        value: 'default',
-	        text: 'Default'
-	    },
-	    {
-	        value: 'gray',
-	        text: 'Gray'
-	    },
-	    {
-	        value: 'metro',
-	        text: 'Metro'
-	    },
-	    {
-	        value: 'bootstrap',
-	        text: 'Bootstrap'
-	    },
-	    {
-	        value: 'black',
-	        text: 'Black'
-	    }
-	];
 	$('#chooseTheme').combobox({
 	    data: themes,
 	    editable: false,
@@ -40,11 +19,14 @@ $(document).ready(function() {
 		weeks:['日','一','二','三','四','五','六'],
 		months:['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
 	});
-
+	//初始化prettyPhoto
 	$('#mainTabContain').tabs({
 		onLoad: function(panel){
 			if(panel.context.innerHTML.indexOf('rel="prettyPhoto')>0){
 				prettyPhotoInit();
+			}
+			if(panel.context.innerHTML.indexOf('paginationBar')>0){
+				paginationInit();
 			}
 		}
 	});
@@ -92,6 +74,22 @@ function removeTabPanel(contain){
         var index = $(contain).tabs('getTabIndex', tab);
         $(contain).tabs('close', index);
     }
+}
+
+//分页初始化
+function paginationInit(){
+	$('div.paginationBar').pagination({
+		onSelectPage:function(pageNumber, pageSize){
+			$(this).pagination('loading');
+			$('#mainTabContain').tabs('getSelected').panel('refresh', $(this).attr('goto')+'&pageNumber='+pageNumber+'&pageSize='+pageSize);
+			$(this).pagination('loaded');
+		},
+		onChangePageSize:function(pageSize){
+			$(this).pagination('loading');
+			$('#mainTabContain').tabs('getSelected').panel('refresh', $(this).attr('goto')+'&pageNumber=1&pageSize='+pageSize);
+			$(this).pagination('loaded');
+		}
+	});
 }
 //prettyPhoto初始化
 function prettyPhotoInit(){
