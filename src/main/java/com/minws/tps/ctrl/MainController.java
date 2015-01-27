@@ -1,14 +1,8 @@
 package com.minws.tps.ctrl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.ext.route.ControllerBind;
-import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.ehcache.CacheInterceptor;
 import com.jfinal.plugin.ehcache.CacheName;
 import com.minws.tps.model.Article;
@@ -34,15 +28,24 @@ public class MainController extends Controller {
 		Integer categoryId = getParaToInt("categoryId", 1);
 		Integer pageNumber = getParaToInt("pageNumber", 1);
 		Integer pageSize = getParaToInt("pageSize", 10);
-		setAttr("articlePage", Article.dao.findAllArticles(categoryId, pageNumber, pageSize));
+		setAttr("articlePage", Article.dao.findArticlesByCategoryId(categoryId, pageNumber, pageSize));
+		setAttr("categoryId", categoryId);
+		render("pages/articleList.htm");
+	}
+
+	public void articleManage() {
+		Integer categoryId = getParaToInt("categoryId", 1);
+		Integer pageNumber = getParaToInt("pageNumber", 1);
+		Integer pageSize = getParaToInt("pageSize", 10);
+		setAttr("articlePage", Article.dao.findAllArticles(pageNumber, pageSize));
 		setAttr("categoryId", categoryId);
 		render("pages/articleList.htm");
 	}
 
 	public void pictureList() {
-		String category = getPara("category", "");
-		String pageNum = getPara("pageNum", "1");
-		String everyNum = getPara("everyNum", "10");
+		Integer categoryId = getParaToInt("categoryId", 1);
+		Integer pageNumber = getParaToInt("pageNumber", 1);
+		Integer pageSize = getParaToInt("pageSize", 10);
 		render("pages/pictureList.htm");
 	}
 }

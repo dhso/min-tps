@@ -50,6 +50,15 @@ body {
 /* 文章列表 articleList */
 .articleList{
 	margin:10px!important;
+	padding: 10px;
+	border-radius: 5px;
+	background-color: #E0ECFF;
+}
+.articleList .media-heading h5{
+	margin: 0;
+}
+.articleList .media-footing{
+	padding-top: 5px;
 }
 /* 图片列表 pictureList */
 .pictureList li{
