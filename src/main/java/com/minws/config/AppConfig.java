@@ -127,7 +127,7 @@ public class AppConfig extends JFinalConfig {
 
 	@Override
 	public void afterJFinalStart() {
-		HttpKit.setProxy(getProperty("tps.proxy.http.host"), getProperty("tps.proxy.http.port"), getProperty("tps.proxy.auth.username"), getProperty("tps.proxy.auth.password"));
+		//HttpKit.setProxy(getProperty("tps.proxy.http.host"), getProperty("tps.proxy.http.port"), getProperty("tps.proxy.auth.username"), getProperty("tps.proxy.auth.password"));
 		super.afterJFinalStart();
 		FreeMarkerRender.getConfiguration().setSharedVariable("shiro", new FreemarketShiroTags());
 	}
