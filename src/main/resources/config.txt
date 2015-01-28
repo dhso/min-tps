@@ -1,7 +1,7 @@
 tps.jdbcDriver=com.mysql.jdbc.Driver
-tps.jdbcUrl = jdbc:mysql://192.168.3.110:3306/tps
+tps.jdbcUrl = jdbc:mysql://aliyunmysql01.mysql.rds.aliyuncs.com:3306/tps
 #tps.jdbcUrl = jdbc:mysql://127.0.0.1:3306/tps
-tps.jdbcUser = root
+tps.jdbcUser = mysql_admin
 tps.jdbcPassword = 923389
 tps.devMode = true
 tps.openShiro = true
@@ -19,15 +19,11 @@ tps.qqauth.scope = all
 tps.qqauth.redirectQQAuthUrl = http://tps.minws.com/auth/qqAuth
 tps.qqauth.redirectQQInfoUrl = http://tps.minws.com/auth/qqInfo
 
-tps.ace.proxy.http.host = 10.242.175.127
-tps.ace.proxy.http.port = 3128
-tps.ace.proxy.auth.username = 1723560127772410_default_54
-tps.ace.proxy.auth.password = rro0530e9o
-
-tps.local.proxy.http.host = 10.51.1.140
-tps.local.proxy.http.port = 8080
-tps.local.proxy.auth.username = 
-tps.local.proxy.auth.password = 
+tps.proxy.open = true
+tps.proxy.http.host = proxy.ace.aliyun.com
+tps.proxy.http.port = 3128
+tps.proxy.auth.username = 1194709104218733_default_-6
+tps.proxy.auth.password = rb6e475twf
 
 tps.qiniu.ak = s4qqqDqXBOcvFKUDsAIDPk1X7p1df1XKAv-2rhU6
 tps.qiniu.sk = PKnBKg_fcc3otG0C_0WPPvW3COLTxW6FaWrJ1bUw

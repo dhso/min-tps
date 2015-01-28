@@ -25,6 +25,7 @@ import com.jfinal.render.IErrorRenderFactory;
 import com.jfinal.render.RedirectRender;
 import com.jfinal.render.Render;
 import com.jfinal.render.ViewType;
+import com.minws.frame.kit.HttpKit;
 import com.minws.frame.plugin.shiro.FreemarketShiroTags;
 
 /**
@@ -126,12 +127,9 @@ public class AppConfig extends JFinalConfig {
 
 	@Override
 	public void afterJFinalStart() {
+		HttpKit.setProxy(getProperty("tps.proxy.http.host"), getProperty("tps.proxy.http.port"), getProperty("tps.proxy.auth.username"), getProperty("tps.proxy.auth.password"));
 		super.afterJFinalStart();
 		FreeMarkerRender.getConfiguration().setSharedVariable("shiro", new FreemarketShiroTags());
-		// HttpUtils.setProxy(ProsMap.getStrPro("tps.local.proxy.http.host"),
-		// ProsMap.getStrPro("tps.local.proxy.http.port"),
-		// ProsMap.getStrPro("tps.local.proxy.auth.username"),
-		// ProsMap.getStrPro("tps.local.proxy.auth.password"));
 	}
 
 }
