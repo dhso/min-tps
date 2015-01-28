@@ -90,28 +90,22 @@ public class HttpKit extends org.apache.commons.lang3.StringUtils {
 	 * @param proxyUser
 	 * @param proxyPassword
 	 */
-	public static void setProxy(String proxyHost, String proxyPort, String proxyUser, String proxyPassword) {
-		System.setProperty("proxySet", "true");
-		System.setProperty("http.proxyHost", proxyHost);
-		System.setProperty("http.proxyPort", proxyUser);
-		System.setProperty("https.proxyHost", proxyHost);
-		System.setProperty("https.proxyPort", proxyUser);
-		// System.setProperty("socksProxyHost", "proxy.ace.aliyun.com");
-		// System.setProperty("socksProxyPort", "3128");
-		// System.setProperty("socket.proxyHost", "proxy.ace.aliyun.com");
-		// System.setProperty("socket.proxyPort", "3128");
+	public static final void setProxy(String proxyHost, String proxyPort, String proxyUser, String proxyPassword) {
+		System.getProperties().put("proxySet", "true");
+		System.getProperties().put("proxyHost", proxyHost);
+		System.getProperties().put("proxyPort", proxyPort);
 		Authenticator.setDefault(new MyAuthenticator(proxyUser, proxyPassword));
 	}
 
-	static class MyAuthenticator extends Authenticator {
-		private String user = "";
-		private String password = "";
+	public static class MyAuthenticator extends Authenticator {
+		private String user;
+		private String password;
 
 		public MyAuthenticator(String user, String password) {
 			this.user = user;
 			this.password = password;
 		}
-
+		@Override
 		protected PasswordAuthentication getPasswordAuthentication() {
 			return new PasswordAuthentication(user, password.toCharArray());
 		}
