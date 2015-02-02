@@ -1,5 +1,5 @@
 tps.jdbcDriver=com.mysql.jdbc.Driver
-tps.jdbcUrl = jdbc:mysql://aliyunmysql01.mysql.rds.aliyuncs.com:3306/tps
+tps.jdbcUrl = jdbc:mysql://rdszjqbmqrqy2in.mysql.rds.aliyuncs.com:3306/re4591m0i5dm04kj
 #tps.jdbcUrl = jdbc:mysql://127.0.0.1:3306/tps
 tps.jdbcUser = mysql_admin
 tps.jdbcPassword = 923389
@@ -7,6 +7,7 @@ tps.devMode = true
 tps.openShiro = true
 tps.encode = utf-8
 tps.salt = tps
+
 # Connection Pool settings
 tps.poolInitialSize=10
 tps.poolMaxSize=20
